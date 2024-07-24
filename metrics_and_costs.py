@@ -160,15 +160,23 @@ def get_optimal_cost(number_of_access, size_in_bytes):
 def get_predicted_cost(number_of_access, size_in_bytes, access_threshold, predicted):
     if predicted == Hot:
         if number_of_access >= access_threshold:  # TP
+            # print(f"TP: {get_object_cost(size_in_bytes, number_of_access, Hot)}")
             return get_object_cost(size_in_bytes, number_of_access, Hot)
         else:  # FP
-            return get_object_cost(size_in_bytes, number_of_access, Hot)
+            no_penalty_cost = get_object_cost(size_in_bytes, number_of_access, Hot)
+            penalty_cost = no_penalty_cost + get_object_cost(
+                size_in_bytes, number_of_access - 1, Warm
+            )
+            # print(f"FP no_penalty_cost: {no_penalty_cost}, penalty_cost: {penalty_cost}")
+            return penalty_cost
     elif predicted == Warm:
         if number_of_access >= access_threshold:  # FN
+            # print(f"FN: {get_object_cost(size_in_bytes, number_of_access, Hot) + get_object_cost(size_in_bytes, number_of_access - 1, Warm)}")
             return get_object_cost(size_in_bytes, 1, Warm) + get_object_cost(
                 size_in_bytes, number_of_access - 1, Hot
             )  # Penalty
         else:  # TN
+            # print(f"TN: {get_object_cost(size_in_bytes, number_of_access, Warm)}")
             return get_object_cost(size_in_bytes, number_of_access, Warm)
     else:
         return 0

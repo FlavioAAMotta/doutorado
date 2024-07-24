@@ -1,5 +1,6 @@
 pop="Pop2"
-declare -a classifiers=("SV-Grid" "SV")
+declare -a classifiers=("SVMR" "RF" "KNN" "DCT" "LR" "SVML" "SVMS" "HV" "SV" "SV-Grid")
+# declare -a classifiers=("SV-Grid" "SV")
 declare -a windows=("1" "4")
 declare -a steps=("1" "4")
 declare -a thresholds=("0.5")
@@ -27,20 +28,24 @@ for i in "${classifiers[@]}"; do
     done
 done
 
-# Executando os comandos sequencialmente
+# Executando os comandos em paralelo
 total_commands=${#commands[@]}
 command_number=0
 
 for cmd in "${commands[@]}"; do
     ((command_number++))
-    bash -c "$cmd"
-    echo "Comando $command_number de $total_commands completado."
+    bash -c "$cmd" &
+    # Limitar o número de processos em paralelo
+    if (( $command_number % 3 == 0 )); then
+        wait # Aguarda os três comandos anteriores terminarem
+    fi
+    echo "Comando $command_number de $total_commands iniciado."
 done
 
+wait # Aguarda os últimos comandos terminarem
 echo "Todos os comandos foram executados."
 
 # pop="Pop2"
-# # declare -a classifiers=("SVMR" "RF" "KNN" "DCT" "LR" "SVML" "SVMS" "HV" "SV")
 # declare -a classifiers=("SV-Grid" "SV")
 # declare -a windows=("1" "4")
 # declare -a steps=("1" "4")
@@ -69,19 +74,14 @@ echo "Todos os comandos foram executados."
 #     done
 # done
 
-# # Executando os comandos em paralelo
+# # Executando os comandos sequencialmente
 # total_commands=${#commands[@]}
 # command_number=0
 
 # for cmd in "${commands[@]}"; do
 #     ((command_number++))
-#     bash -c "$cmd" &
-#     # Limitar o número de processos em paralelo
-#     if (( $command_number % 3 == 0 )); then
-#         wait # Aguarda os três comandos anteriores terminarem
-#     fi
-#     echo "Comando $command_number de $total_commands iniciado."
+#     bash -c "$cmd"
+#     echo "Comando $command_number de $total_commands completado."
 # done
 
-# wait # Aguarda os últimos comandos terminarem
 # echo "Todos os comandos foram executados."

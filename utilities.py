@@ -3,7 +3,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import MinMaxScaler
 from imblearn.over_sampling import SMOTE
 
-PATH = "../eval/"
+PATH = "data/"
 
 
 def read_files(pop):

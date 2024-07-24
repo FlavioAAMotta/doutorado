@@ -27,10 +27,10 @@ def get_default_classifiers(probability=False, random_state=42, n_neighbors=None
     voting_clf = VotingClassifier(list(default_clfs.items()), voting="soft", n_jobs=-1)
     
     param_grid = {
-        "SVMR__C": [0.1, 10, 100],
-        "SVMR__gamma": [1, 0.1, 0.01],
-        "KNN__n_neighbors": [2, 3, 4],
-        "RF__n_estimators": [100, 200, 300],
+        "SVMR__C": [0.1, 1],
+        "SVMR__gamma": [1, 0.1],
+        "KNN__n_neighbors": [2, 3],
+        "RF__n_estimators": [100, 200],
     }
 
     grid = GridSearchCV(voting_clf, param_grid=param_grid, cv=3, n_jobs=-1)
