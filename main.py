@@ -60,7 +60,8 @@ def run_train_eval(clf_name, window_size, steps_to_take, pop, threshold, useVolO
             y_pred,
             arq_acessos,
         )
-        final_result = pd.concat([final_result, new_row], ignore_index=True)
+        new_row_df = pd.DataFrame([new_row])  # Converte new_row para DataFrame
+        final_result = pd.concat([final_result, new_row_df], ignore_index=True)
 
 
     return final_result
@@ -75,7 +76,6 @@ def main():
     threshold = float(sys.argv[5])
     useVolOnTraining = sys.argv[6] == "True"
 
-    print(f"Running {clf_name} with window size {window_size} and steps to take {steps_to_take} on population {pop} H+W")
     final_result = run_train_eval(clf_name, window_size, steps_to_take, pop, threshold, useVolOnTraining)
     formatted_result = {
         "optimal_cost": final_result["optimal_cost"].sum(),
