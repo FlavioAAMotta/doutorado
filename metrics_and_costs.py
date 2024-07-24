@@ -172,7 +172,7 @@ def get_predicted_cost(number_of_access, size_in_bytes, access_threshold, predic
     elif predicted == Warm:
         if number_of_access >= access_threshold:  # FN
             # print(f"FN: {get_object_cost(size_in_bytes, number_of_access, Hot) + get_object_cost(size_in_bytes, number_of_access - 1, Warm)}")
-            return get_object_cost(size_in_bytes, 1, Warm) + get_object_cost(
+            return get_object_cost(size_in_bytes, 1, Hot) + get_object_cost(
                 size_in_bytes, number_of_access - 1, Hot
             )  # Penalty
         else:  # TN

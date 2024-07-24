@@ -1,6 +1,7 @@
 import sys
 import warnings
 from utilities import read_files
+import pandas as pd
 from classifiers import (
     set_classifier,
     train_and_predict_for_window,
@@ -59,7 +60,8 @@ def run_train_eval(clf_name, window_size, steps_to_take, pop, threshold, useVolO
             y_pred,
             arq_acessos,
         )
-        final_result = final_result.append(new_row, ignore_index=True)
+        final_result = pd.concat([final_result, new_row], ignore_index=True)
+
 
     return final_result
 
