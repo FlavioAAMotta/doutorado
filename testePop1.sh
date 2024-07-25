@@ -1,6 +1,6 @@
 pop="Pop1"
-declare -a classifiers=("SVMR" "RF" "KNN" "DCT" "LR" "SVML" "SVMS" "HV" "SV" "SV-Grid")
-# declare -a classifiers=("SV-Grid" "SV")
+# declare -a classifiers=("SVMR" "RF" "KNN" "DCT" "LR" "SVML" "SVMS" "HV" "SV" "SV-Grid")
+declare -a classifiers=("SV" "HV" "SV-Grid")
 declare -a windows=("1" "4")
 declare -a steps=("1" "4")
 declare -a thresholds=("0.5")
