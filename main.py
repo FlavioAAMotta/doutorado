@@ -32,6 +32,7 @@ def run_train_eval(clf_name, window_size, steps_to_take, pop, threshold, useVolO
             actual_class,
             initialEvaluation,
             endEvaluation,
+            clf,  # Retorna o modelo atualizado
         ) = train_and_predict_for_window(
             time_window,
             clf_name,

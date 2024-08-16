@@ -84,12 +84,19 @@ def prepare_data(time_window, window_size, steps_to_take, arq_acessos, arq_class
 
     return X_train, y_train, X_test, y_test, initialTrain, initialEvaluation, endEvaluation
 
-def train_and_predict_for_window(time_window, clf_name, clf, window_size, steps_to_take, arq_acessos, arq_classes, arq_vol_bytes, threshold, useVolOnTraining):
+def train_and_predict_for_window(time_window, clf_name, clf, window_size, steps_to_take, arq_acessos, arq_classes, arq_vol_bytes, threshold, useVolOnTraining, reuse_model=True):
     X_train, y_train, X_test, y_test, initialTrain, initialEvaluation, endEvaluation = prepare_data(time_window, window_size, steps_to_take, arq_acessos, arq_classes, arq_vol_bytes)
-    clf, X_test = train_ML(X_train, y_train, clf, arq_vol_bytes, useVolOnTraining, endEvaluation, X_test)
+    
+    # Se a opção reuse_model for True, apenas atualizar o modelo com novos dados, se suportado.
+    if reuse_model and hasattr(clf, 'partial_fit'):
+        clf.partial_fit(X_train, y_train, classes=np.unique(y_train))
+    else:
+        clf, X_test = train_ML(X_train, y_train, clf, arq_vol_bytes, useVolOnTraining, endEvaluation, X_test)
+
+
     y_pred = predict(clf_name, clf, X_test, threshold)
     actual_class = y_test.apply(lambda row: int(row.any()), axis=1).values
-    return X_test, y_pred, actual_class, initialEvaluation, endEvaluation
+    return X_test, y_pred, actual_class, initialEvaluation, endEvaluation, clf
 
 def predict(clf_name, clf, X_test, threshold):
     if clf_name == "HV":

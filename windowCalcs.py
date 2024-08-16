@@ -4,8 +4,8 @@
 
 # Exemplo1: time_window = 1, windowSize = 2, stepsToTake = 1
 # [1, 3, 3, 5, 3, 5, 5, 6]
-# Exemplo2: time_window = 10, windowSize = 4, stepsToTake = 4
-# [10, 14, 14, 18, 14, 18, 18, 22]
+# Exemplo2: time_window = 8, windowSize = 4, stepsToTake = 4
+# [8, 12, 12, 16, 12, 16, 16, 20]
 # Exemplo3: time_window = 10, windowSize = 4, stepsToTake = 2
 # [10, 14, 14, 18, 14, 16, 16, 18]
 # Exemplo4: time_window = 10, windowSize = 4, stepsToTake = 1

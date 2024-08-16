@@ -255,9 +255,12 @@ def get_online_costs(X_train, access, volume, steps_to_take, actual_class):
     costs = []
     predictions = []
     access_zeroes = turnMinusOneInZeroes(access)
+    print(f"X_train: {X_train}")
     for i in range(len(access_zeroes)):
         cost = 0.0
         predictions.append(Warm)
+        # Print the access_zeroes for each file in the dataset
+        print(f"File {i}: {access_zeroes.iloc[i]} sum: {access_zeroes.iloc[i, :-1].sum()}")
         # Check if X_train has any value above 0, if does, then the file is hot
         if access_zeroes.iloc[i, :-1].sum() > 0:
             predictions[i] = Hot
