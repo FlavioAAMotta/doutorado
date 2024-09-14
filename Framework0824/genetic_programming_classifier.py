@@ -5,6 +5,8 @@ import numpy as np
 from sklearn.base import BaseEstimator, ClassifierMixin
 from node import VariableNode, ConstantNode, OperatorNode
 from generate import generate_random_expression, crossover, mutate
+from cost_calculation import calculate_costs  # Certifique-se de importar a função
+import pandas as pd
 
 class GeneticProgrammingClassifier(BaseEstimator, ClassifierMixin):
     def __init__(self, population_size=50, generations=100, max_depth=5, random_state=None):
@@ -15,23 +17,24 @@ class GeneticProgrammingClassifier(BaseEstimator, ClassifierMixin):
         self.best_individual_ = None
         self.variables_ = None
 
-    def fit(self, X, y):
+    def fit(self, X, y, vol_bytes, acc_fut):
         # Definir a semente aleatória
         if self.random_state is not None:
             np.random.seed(self.random_state)
             random.seed(self.random_state)
 
-        # Converter X e y para listas
-        dataset = X.values.tolist()
-        labels = y.tolist()
-
-        # Determinar os nomes das variáveis com base nas colunas de X
+        # Armazenar os nomes das variáveis
         self.variables_ = X.columns.tolist()
+
+        # Combinar os dados em um único DataFrame
+        data = X.copy()
+        data['label'] = y
+        data['vol_bytes'] = vol_bytes
+        data['acc_fut'] = acc_fut
 
         # Executar o algoritmo de programação genética
         self.best_individual_ = self._genetic_programming(
-            dataset=dataset,
-            labels=labels,
+            data=data,
             variables=self.variables_
         )
         return self
@@ -54,7 +57,7 @@ class GeneticProgrammingClassifier(BaseEstimator, ClassifierMixin):
             proba.append([1 - probability, probability])
         return np.array(proba)
 
-    def _genetic_programming(self, dataset, labels, variables):
+    def _genetic_programming(self, data, variables):
         # Inicializa a população
         population = [generate_random_expression(self.max_depth, variables) for _ in range(self.population_size)]
 
@@ -62,7 +65,7 @@ class GeneticProgrammingClassifier(BaseEstimator, ClassifierMixin):
             # Avalia o fitness de cada indivíduo
             fitness_scores = []
             for individual in population:
-                fitness = self._evaluate_individual(individual, dataset, labels, variables)
+                fitness = self._evaluate_individual(individual, data, variables)
                 fitness_scores.append((fitness, individual))
 
             # Ordena a população com base no fitness
@@ -89,17 +92,26 @@ class GeneticProgrammingClassifier(BaseEstimator, ClassifierMixin):
         best_individual = fitness_scores[0][1]
         return best_individual
 
-    def _evaluate_individual(self, individual, dataset, labels, variables):
-        correct_predictions = 0
-        total = len(dataset)
-        for data_point, label in zip(dataset, labels):
-            vars_dict = dict(zip(variables, data_point))
+    def _evaluate_individual(self, individual, data, variables):
+        # Avaliar o indivíduo em todos os dados
+        df = data.copy()
+        predictions = []
+        for index, row in df.iterrows():
+            vars_dict = row[variables].to_dict()
             try:
                 result = individual.evaluate(vars_dict)
                 prediction = int(bool(result))
-                if prediction == label:
-                    correct_predictions += 1
             except Exception:
-                pass  # Pode penalizar indivíduos que causam exceções
-        fitness = correct_predictions / total
+                prediction = 0  # Penaliza o indivíduo em caso de erro
+            predictions.append(prediction)
+        df['pred'] = predictions
+
+        # Calcular o custo usando a função 'calculate_costs'
+        costs = calculate_costs(df)
+        cost_ml = costs['cost ml']  # Extrair o custo total das predições do modelo
+
+        # Definir o fitness como o inverso do custo (adicionar epsilon para evitar divisão por zero)
+        epsilon = 1e-6
+        fitness = 1 / (cost_ml + epsilon)
         return fitness
+
