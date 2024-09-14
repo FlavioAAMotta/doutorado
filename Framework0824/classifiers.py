@@ -9,6 +9,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 import pandas as pd
 from sklearn.model_selection import GridSearchCV
+from genetic_programming_classifier import GeneticProgrammingClassifier
+
 
 def get_default_classifiers(probability=True, random_state=42, n_neighbors=4):
 
@@ -19,7 +21,12 @@ def get_default_classifiers(probability=True, random_state=42, n_neighbors=4):
         "RF": RandomForestClassifier(n_jobs=-1, random_state=random_state, n_estimators=100),
         "KNN": KNeighborsClassifier(n_neighbors=n_neighbors, n_jobs=-1),
         "DCT": DecisionTreeClassifier(random_state=random_state),
-        "LR": LogisticRegression(n_jobs=-1),
+        "GP": GeneticProgrammingClassifier(
+            population_size=50,
+            generations=100,
+            max_depth=5,
+            random_state=random_state
+        ),        "LR": LogisticRegression(n_jobs=-1),
     }
 
     voting_clf = VotingClassifier(list(default_clfs.items()), voting="soft", n_jobs=-1)
