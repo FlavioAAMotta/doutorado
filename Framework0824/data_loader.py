@@ -19,5 +19,5 @@ def load_params():
     # for now, we will hard code the parameters
     params['window_size'] = 1
     params['step_size'] = 1
-    params['model'] = 'ONL'
+    params['model'] = 'GP'
     return params
