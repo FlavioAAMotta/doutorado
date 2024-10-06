@@ -1,0 +1,14 @@
+# config/config.yaml
+
+window_size: 1
+step_size: 1
+model: 'SVML'
+models_to_run:
+  - 'SVMR'
+  - 'ONL'
+  - 'SVML'
+  - 'RF'
+  - 'DCT'
+  - 'KNN'
+  - 'LR'
+pop_name: 'Pop1'
