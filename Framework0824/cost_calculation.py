@@ -58,36 +58,38 @@ def get_classifier_cost(row, costs, vol_gb, acc_fut):
     label = row["label"]
     predicted = row["pred"]
 
-    if label == Hot and predicted == Hot:
-        costs["TP"] += calculate_object_cost(vol_gb, acc_fut, Hot)
-    elif label == Hot and predicted == Warm:
-        # False Negative: Deveria ser Hot, mas previu Warm
-        costs["FN"] += calculate_object_cost(vol_gb, acc_fut, Warm)
-    elif label == Warm and predicted == Hot:
-        # False Positive: Deveria ser Warm, mas previu Hot
-        costs["FP"] += calculate_object_cost(vol_gb, acc_fut, Hot)
-    elif label == Warm and predicted == Warm:
-        costs["TN"] += calculate_object_cost(vol_gb, acc_fut, Warm)
+    if predicted == Hot:
+        costs["prediction"] += calculate_object_cost(vol_gb, acc_fut, Hot)
+    else:  # Predicted Warm
+        costs["prediction"] += calculate_object_cost(vol_gb, acc_fut, Warm)
 
 def get_cost_of_classifiers(costs):
-    prediction_cost = costs["TP"] + costs["FN"] + costs["TN"] + costs["FP"]  # Custo total das predições
+    prediction_cost = costs["prediction"]
     optimal_cost = costs["opt"]
-    default_cost = costs["always_H"]  # Custo se todos os objetos forem armazenados como Hot
+    always_hot_cost = costs["always_H"]
+    always_warm_cost = costs["always_W"]
 
     # Evitar divisão por zero
-    if default_cost == 0:
-        default_rcs = 0
-        prediction_rcs = 0
+    if always_hot_cost == 0:
+        rcs_ml = 0
+        rcs_always_hot = 0
+        rcs_always_warm = 0
+        rcs_opt = 0
     else:
-        default_rcs = (default_cost - optimal_cost) / default_cost
-        prediction_rcs = (default_cost - prediction_cost) / default_cost
+        rcs_ml = (always_hot_cost - prediction_cost) / always_hot_cost
+        rcs_always_hot = 0  # (always_hot_cost - always_hot_cost) / always_hot_cost
+        rcs_always_warm = (always_hot_cost - always_warm_cost) / always_hot_cost
+        rcs_opt = (always_hot_cost - optimal_cost) / always_hot_cost
 
     return {
-        "rcs ml": prediction_rcs,
-        "rcs opt": default_rcs,
+        "rcs ml": rcs_ml,
+        "rcs always hot": rcs_always_hot,
+        "rcs always warm": rcs_always_warm,
+        "rcs opt": rcs_opt,
         "cost ml": prediction_cost,
+        "cost always hot": always_hot_cost,
+        "cost always warm": always_warm_cost,
         "cost opt": optimal_cost,
-        "cost all hot": default_cost,
     }
 
 def calculate_costs(df):
@@ -108,6 +110,8 @@ def calculate_costs(df):
 
         # Custo se sempre armazenado como Hot
         costs["always_H"] += calculate_object_cost(volume_per_gb, total_access, Hot)
+        # Custo se sempre armazenado como Warm
+        costs["always_W"] += calculate_object_cost(volume_per_gb, total_access, Warm)
 
     return get_cost_of_classifiers(costs)
 

@@ -1,0 +1,897 @@
+Resultados para a janela: 0
+  Dados   Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+0   pop  Online    236.0  ...         1.361726        315.108555  1.337974
+
+[1 rows x 23 columns]
+  Dados       Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+0   pop  Always Hot    236.0  ...         1.361726        315.108555  1.337974
+
+[1 rows x 23 columns]
+  Dados        Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+0   pop  Always Warm    236.0  ...         1.361726        315.108555  1.337974
+
+[1 rows x 23 columns]
+Resultados para a janela: 1
+  Dados   Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+1   pop  Online    553.0  ...         2.647084        369.600733  2.484465
+
+[1 rows x 23 columns]
+  Dados       Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+1   pop  Always Hot    553.0  ...         2.647084        369.600733  2.484465
+
+[1 rows x 23 columns]
+  Dados        Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+1   pop  Always Warm    553.0  ...         2.647084        369.600733  2.484465
+
+[1 rows x 23 columns]
+Resultados para a janela: 2
+  Dados   Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+2   pop  Online    700.0  ...         4.315448        469.351293  3.672969
+
+[1 rows x 23 columns]
+  Dados       Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+2   pop  Always Hot    700.0  ...         4.315448        469.351293  3.672969
+
+[1 rows x 23 columns]
+  Dados        Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+2   pop  Always Warm    700.0  ...         4.315448        469.351293  3.672969
+
+[1 rows x 23 columns]
+Resultados para a janela: 3
+  Dados   Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+3   pop  Online    788.0  ...         5.560024         81.495588  4.542457
+
+[1 rows x 23 columns]
+  Dados       Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+3   pop  Always Hot    788.0  ...         5.560024         81.495588  4.542457
+
+[1 rows x 23 columns]
+  Dados        Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+3   pop  Always Warm    788.0  ...         5.560024         81.495588  4.542457
+
+[1 rows x 23 columns]
+Resultados para a janela: 4
+  Dados   Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+4   pop  Online    850.0  ...         5.947741         42.641787  4.131467
+
+[1 rows x 23 columns]
+  Dados       Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+4   pop  Always Hot    850.0  ...         5.947741         42.641787  4.131467
+
+[1 rows x 23 columns]
+  Dados        Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+4   pop  Always Warm    850.0  ...         5.947741         42.641787  4.131467
+
+[1 rows x 23 columns]
+Resultados para a janela: 5
+  Dados   Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+5   pop  Online    872.0  ...         6.599816         91.536767  4.955494
+
+[1 rows x 23 columns]
+  Dados       Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+5   pop  Always Hot    872.0  ...         6.599816         91.536767  4.955494
+
+[1 rows x 23 columns]
+  Dados        Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+5   pop  Always Warm    872.0  ...         6.599816         91.536767  4.955494
+
+[1 rows x 23 columns]
+Resultados para a janela: 6
+  Dados   Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+6   pop  Online    915.0  ...         7.586739        307.478908   6.17837
+
+[1 rows x 23 columns]
+  Dados       Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+6   pop  Always Hot    915.0  ...         7.586739        307.478908   6.17837
+
+[1 rows x 23 columns]
+  Dados        Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+6   pop  Always Warm    915.0  ...         7.586739        307.478908   6.17837
+
+[1 rows x 23 columns]
+Resultados para a janela: 7
+  Dados   Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+7   pop  Online    996.0  ...         9.103004         818.65903  8.044182
+
+[1 rows x 23 columns]
+  Dados       Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+7   pop  Always Hot    996.0  ...         9.103004         818.65903  8.044182
+
+[1 rows x 23 columns]
+  Dados        Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+7   pop  Always Warm    996.0  ...         9.103004         818.65903  8.044182
+
+[1 rows x 23 columns]
+Resultados para a janela: 8
+  Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+8   pop  Online   1112.0  ...        11.524785        1173.41694  10.279309
+
+[1 rows x 23 columns]
+  Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+8   pop  Always Hot   1112.0  ...        11.524785        1173.41694  10.279309
+
+[1 rows x 23 columns]
+  Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+8   pop  Always Warm   1112.0  ...        11.524785        1173.41694  10.279309
+
+[1 rows x 23 columns]
+Resultados para a janela: 9
+  Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+9   pop  Online   1216.0  ...        13.272481        962.631833  11.524959
+
+[1 rows x 23 columns]
+  Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+9   pop  Always Hot   1216.0  ...        13.272481        962.631833  11.524959
+
+[1 rows x 23 columns]
+  Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+9   pop  Always Warm   1216.0  ...        13.272481        962.631833  11.524959
+
+[1 rows x 23 columns]
+Resultados para a janela: 10
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+10   pop  Online   1309.0  ...        15.025314          996.3381  12.580466
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+10   pop  Always Hot   1309.0  ...        15.025314          996.3381  12.580466
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+10   pop  Always Warm   1309.0  ...        15.025314          996.3381  12.580466
+
+[1 rows x 23 columns]
+Resultados para a janela: 11
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+11   pop  Online   1387.0  ...         17.36927       4277.053795  14.892573
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+11   pop  Always Hot   1387.0  ...         17.36927       4277.053795  14.892573
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+11   pop  Always Warm   1387.0  ...         17.36927       4277.053795  14.892573
+
+[1 rows x 23 columns]
+Resultados para a janela: 12
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+12   pop  Online   1474.0  ...        20.048259       6620.042371  17.804234
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+12   pop  Always Hot   1474.0  ...        20.048259       6620.042371  17.804234
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+12   pop  Always Warm   1474.0  ...        20.048259       6620.042371  17.804234
+
+[1 rows x 23 columns]
+Resultados para a janela: 13
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+13   pop  Online   1569.0  ...        21.931705       1683.762646  19.023467
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+13   pop  Always Hot   1569.0  ...        21.931705       1683.762646  19.023467
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+13   pop  Always Warm   1569.0  ...        21.931705       1683.762646  19.023467
+
+[1 rows x 23 columns]
+Resultados para a janela: 14
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+14   pop  Online   1662.0  ...        24.478977       1353.398097  21.494539
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+14   pop  Always Hot   1662.0  ...        24.478977       1353.398097  21.494539
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+14   pop  Always Warm   1662.0  ...        24.478977       1353.398097  21.494539
+
+[1 rows x 23 columns]
+Resultados para a janela: 15
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+15   pop  Online   1747.0  ...        26.571198       2165.975715  23.395903
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+15   pop  Always Hot   1747.0  ...        26.571198       2165.975715  23.395903
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+15   pop  Always Warm   1747.0  ...        26.571198       2165.975715  23.395903
+
+[1 rows x 23 columns]
+Resultados para a janela: 16
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+16   pop  Online   1819.0  ...        29.075853       2400.061121  25.165095
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+16   pop  Always Hot   1819.0  ...        29.075853       2400.061121  25.165095
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+16   pop  Always Warm   1819.0  ...        29.075853       2400.061121  25.165095
+
+[1 rows x 23 columns]
+Resultados para a janela: 17
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+17   pop  Online   1947.0  ...        31.479825       1999.371118  27.416931
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+17   pop  Always Hot   1947.0  ...        31.479825       1999.371118  27.416931
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+17   pop  Always Warm   1947.0  ...        31.479825       1999.371118  27.416931
+
+[1 rows x 23 columns]
+Resultados para a janela: 18
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+18   pop  Online   2022.0  ...        33.377308       1619.895334  28.557046
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+18   pop  Always Hot   2022.0  ...        33.377308       1619.895334  28.557046
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+18   pop  Always Warm   2022.0  ...        33.377308       1619.895334  28.557046
+
+[1 rows x 23 columns]
+Resultados para a janela: 19
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+19   pop  Online   2122.0  ...        35.371669       2647.913979  30.212833
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+19   pop  Always Hot   2122.0  ...        35.371669       2647.913979  30.212833
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+19   pop  Always Warm   2122.0  ...        35.371669       2647.913979  30.212833
+
+[1 rows x 23 columns]
+Resultados para a janela: 20
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+20   pop  Online   2206.0  ...        37.280723       2464.300754  31.797278
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+20   pop  Always Hot   2206.0  ...        37.280723       2464.300754  31.797278
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+20   pop  Always Warm   2206.0  ...        37.280723       2464.300754  31.797278
+
+[1 rows x 23 columns]
+Resultados para a janela: 21
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+21   pop  Online   2271.0  ...        39.765686       2597.959329  33.267894
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+21   pop  Always Hot   2271.0  ...        39.765686       2597.959329  33.267894
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+21   pop  Always Warm   2271.0  ...        39.765686       2597.959329  33.267894
+
+[1 rows x 23 columns]
+Resultados para a janela: 22
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+22   pop  Online   2337.0  ...        41.078635       2037.797603  34.074146
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+22   pop  Always Hot   2337.0  ...        41.078635       2037.797603  34.074146
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+22   pop  Always Warm   2337.0  ...        41.078635       2037.797603  34.074146
+
+[1 rows x 23 columns]
+Resultados para a janela: 0
+  Dados   Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+0   pop  Online    236.0  ...         1.361726        315.108555  1.337974
+
+[1 rows x 23 columns]
+  Dados       Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+0   pop  Always Hot    236.0  ...         1.361726        315.108555  1.337974
+
+[1 rows x 23 columns]
+  Dados        Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+0   pop  Always Warm    236.0  ...         1.361726        315.108555  1.337974
+
+[1 rows x 23 columns]
+Resultados para a janela: 1
+  Dados   Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+1   pop  Online    553.0  ...         2.647084        369.600733  2.484465
+
+[1 rows x 23 columns]
+  Dados       Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+1   pop  Always Hot    553.0  ...         2.647084        369.600733  2.484465
+
+[1 rows x 23 columns]
+  Dados        Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+1   pop  Always Warm    553.0  ...         2.647084        369.600733  2.484465
+
+[1 rows x 23 columns]
+Resultados para a janela: 2
+  Dados   Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+2   pop  Online    700.0  ...         4.315448        469.351293  3.672969
+
+[1 rows x 23 columns]
+  Dados       Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+2   pop  Always Hot    700.0  ...         4.315448        469.351293  3.672969
+
+[1 rows x 23 columns]
+  Dados        Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+2   pop  Always Warm    700.0  ...         4.315448        469.351293  3.672969
+
+[1 rows x 23 columns]
+Resultados para a janela: 3
+  Dados   Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+3   pop  Online    788.0  ...         5.560024         81.495588  4.542457
+
+[1 rows x 23 columns]
+  Dados       Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+3   pop  Always Hot    788.0  ...         5.560024         81.495588  4.542457
+
+[1 rows x 23 columns]
+  Dados        Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+3   pop  Always Warm    788.0  ...         5.560024         81.495588  4.542457
+
+[1 rows x 23 columns]
+Resultados para a janela: 4
+  Dados   Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+4   pop  Online    850.0  ...         5.947741         42.641787  4.131467
+
+[1 rows x 23 columns]
+  Dados       Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+4   pop  Always Hot    850.0  ...         5.947741         42.641787  4.131467
+
+[1 rows x 23 columns]
+  Dados        Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+4   pop  Always Warm    850.0  ...         5.947741         42.641787  4.131467
+
+[1 rows x 23 columns]
+Resultados para a janela: 5
+  Dados   Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+5   pop  Online    872.0  ...         6.599816         91.536767  4.955494
+
+[1 rows x 23 columns]
+  Dados       Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+5   pop  Always Hot    872.0  ...         6.599816         91.536767  4.955494
+
+[1 rows x 23 columns]
+  Dados        Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+5   pop  Always Warm    872.0  ...         6.599816         91.536767  4.955494
+
+[1 rows x 23 columns]
+Resultados para a janela: 6
+  Dados   Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+6   pop  Online    915.0  ...         7.586739        307.478908   6.17837
+
+[1 rows x 23 columns]
+  Dados       Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+6   pop  Always Hot    915.0  ...         7.586739        307.478908   6.17837
+
+[1 rows x 23 columns]
+  Dados        Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+6   pop  Always Warm    915.0  ...         7.586739        307.478908   6.17837
+
+[1 rows x 23 columns]
+Resultados para a janela: 7
+  Dados   Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+7   pop  Online    996.0  ...         9.103004         818.65903  8.044182
+
+[1 rows x 23 columns]
+  Dados       Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+7   pop  Always Hot    996.0  ...         9.103004         818.65903  8.044182
+
+[1 rows x 23 columns]
+  Dados        Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+7   pop  Always Warm    996.0  ...         9.103004         818.65903  8.044182
+
+[1 rows x 23 columns]
+Resultados para a janela: 8
+  Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+8   pop  Online   1112.0  ...        11.524785        1173.41694  10.279309
+
+[1 rows x 23 columns]
+  Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+8   pop  Always Hot   1112.0  ...        11.524785        1173.41694  10.279309
+
+[1 rows x 23 columns]
+  Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+8   pop  Always Warm   1112.0  ...        11.524785        1173.41694  10.279309
+
+[1 rows x 23 columns]
+Resultados para a janela: 9
+  Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+9   pop  Online   1216.0  ...        13.272481        962.631833  11.524959
+
+[1 rows x 23 columns]
+  Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+9   pop  Always Hot   1216.0  ...        13.272481        962.631833  11.524959
+
+[1 rows x 23 columns]
+  Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+9   pop  Always Warm   1216.0  ...        13.272481        962.631833  11.524959
+
+[1 rows x 23 columns]
+Resultados para a janela: 10
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+10   pop  Online   1309.0  ...        15.025314          996.3381  12.580466
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+10   pop  Always Hot   1309.0  ...        15.025314          996.3381  12.580466
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+10   pop  Always Warm   1309.0  ...        15.025314          996.3381  12.580466
+
+[1 rows x 23 columns]
+Resultados para a janela: 11
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+11   pop  Online   1387.0  ...         17.36927       4277.053795  14.892573
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+11   pop  Always Hot   1387.0  ...         17.36927       4277.053795  14.892573
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+11   pop  Always Warm   1387.0  ...         17.36927       4277.053795  14.892573
+
+[1 rows x 23 columns]
+Resultados para a janela: 12
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+12   pop  Online   1474.0  ...        20.048259       6620.042371  17.804234
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+12   pop  Always Hot   1474.0  ...        20.048259       6620.042371  17.804234
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+12   pop  Always Warm   1474.0  ...        20.048259       6620.042371  17.804234
+
+[1 rows x 23 columns]
+Resultados para a janela: 13
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+13   pop  Online   1569.0  ...        21.931705       1683.762646  19.023467
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+13   pop  Always Hot   1569.0  ...        21.931705       1683.762646  19.023467
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+13   pop  Always Warm   1569.0  ...        21.931705       1683.762646  19.023467
+
+[1 rows x 23 columns]
+Resultados para a janela: 14
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+14   pop  Online   1662.0  ...        24.478977       1353.398097  21.494539
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+14   pop  Always Hot   1662.0  ...        24.478977       1353.398097  21.494539
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+14   pop  Always Warm   1662.0  ...        24.478977       1353.398097  21.494539
+
+[1 rows x 23 columns]
+Resultados para a janela: 15
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+15   pop  Online   1747.0  ...        26.571198       2165.975715  23.395903
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+15   pop  Always Hot   1747.0  ...        26.571198       2165.975715  23.395903
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+15   pop  Always Warm   1747.0  ...        26.571198       2165.975715  23.395903
+
+[1 rows x 23 columns]
+Resultados para a janela: 16
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+16   pop  Online   1819.0  ...        29.075853       2400.061121  25.165095
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+16   pop  Always Hot   1819.0  ...        29.075853       2400.061121  25.165095
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+16   pop  Always Warm   1819.0  ...        29.075853       2400.061121  25.165095
+
+[1 rows x 23 columns]
+Resultados para a janela: 17
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+17   pop  Online   1947.0  ...        31.479825       1999.371118  27.416931
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+17   pop  Always Hot   1947.0  ...        31.479825       1999.371118  27.416931
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+17   pop  Always Warm   1947.0  ...        31.479825       1999.371118  27.416931
+
+[1 rows x 23 columns]
+Resultados para a janela: 18
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+18   pop  Online   2022.0  ...        33.377308       1619.895334  28.557046
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+18   pop  Always Hot   2022.0  ...        33.377308       1619.895334  28.557046
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+18   pop  Always Warm   2022.0  ...        33.377308       1619.895334  28.557046
+
+[1 rows x 23 columns]
+Resultados para a janela: 19
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+19   pop  Online   2122.0  ...        35.371669       2647.913979  30.212833
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+19   pop  Always Hot   2122.0  ...        35.371669       2647.913979  30.212833
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+19   pop  Always Warm   2122.0  ...        35.371669       2647.913979  30.212833
+
+[1 rows x 23 columns]
+Resultados para a janela: 20
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+20   pop  Online   2206.0  ...        37.280723       2464.300754  31.797278
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+20   pop  Always Hot   2206.0  ...        37.280723       2464.300754  31.797278
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+20   pop  Always Warm   2206.0  ...        37.280723       2464.300754  31.797278
+
+[1 rows x 23 columns]
+Resultados para a janela: 21
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+21   pop  Online   2271.0  ...        39.765686       2597.959329  33.267894
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+21   pop  Always Hot   2271.0  ...        39.765686       2597.959329  33.267894
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+21   pop  Always Warm   2271.0  ...        39.765686       2597.959329  33.267894
+
+[1 rows x 23 columns]
+Resultados para a janela: 22
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+22   pop  Online   2337.0  ...        41.078635       2037.797603  34.074146
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+22   pop  Always Hot   2337.0  ...        41.078635       2037.797603  34.074146
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+22   pop  Always Warm   2337.0  ...        41.078635       2037.797603  34.074146
+
+[1 rows x 23 columns]
+Resultados para a janela: 23
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+23   pop  Online   2390.0  ...        42.172457        901.359607  32.612017
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+23   pop  Always Hot   2390.0  ...        42.172457        901.359607  32.612017
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+23   pop  Always Warm   2390.0  ...        42.172457        901.359607  32.612017
+
+[1 rows x 23 columns]
+Resultados para a janela: 24
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+24   pop  Online   2414.0  ...        42.558766        341.117687  29.139507
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+24   pop  Always Hot   2414.0  ...        42.558766        341.117687  29.139507
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+24   pop  Always Warm   2414.0  ...        42.558766        341.117687  29.139507
+
+[1 rows x 23 columns]
+Resultados para a janela: 25
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+25   pop  Online   2415.0  ...        43.055033        383.029803  30.939903
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+25   pop  Always Hot   2415.0  ...        43.055033        383.029803  30.939903
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+25   pop  Always Warm   2415.0  ...        43.055033        383.029803  30.939903
+
+[1 rows x 23 columns]
+Resultados para a janela: 26
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+26   pop  Online   2431.0  ...        45.318666        1614.70595  37.909894
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+26   pop  Always Hot   2431.0  ...        45.318666        1614.70595  37.909894
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+26   pop  Always Warm   2431.0  ...        45.318666        1614.70595  37.909894
+
+[1 rows x 23 columns]
+Resultados para a janela: 27
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+27   pop  Online   2500.0  ...        49.173077        2543.07914  40.321927
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+27   pop  Always Hot   2500.0  ...        49.173077        2543.07914  40.321927
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+27   pop  Always Warm   2500.0  ...        49.173077        2543.07914  40.321927
+
+[1 rows x 23 columns]
+Resultados para a janela: 28
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+28   pop  Online   2595.0  ...        50.984882       3288.137574  43.59604
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+28   pop  Always Hot   2595.0  ...        50.984882       3288.137574  43.59604
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm  cost opt
+28   pop  Always Warm   2595.0  ...        50.984882       3288.137574  43.59604
+
+[1 rows x 23 columns]
+Resultados para a janela: 29
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+29   pop  Online   2679.0  ...        53.093875       4528.374051  44.492276
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+29   pop  Always Hot   2679.0  ...        53.093875       4528.374051  44.492276
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+29   pop  Always Warm   2679.0  ...        53.093875       4528.374051  44.492276
+
+[1 rows x 23 columns]
+Resultados para a janela: 30
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+30   pop  Online   2744.0  ...        55.566889       6626.653494  46.330472
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+30   pop  Always Hot   2744.0  ...        55.566889       6626.653494  46.330472
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+30   pop  Always Warm   2744.0  ...        55.566889       6626.653494  46.330472
+
+[1 rows x 23 columns]
+Resultados para a janela: 31
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+31   pop  Online   2810.0  ...        58.031321       6219.596761  48.221449
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+31   pop  Always Hot   2810.0  ...        58.031321       6219.596761  48.221449
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+31   pop  Always Warm   2810.0  ...        58.031321       6219.596761  48.221449
+
+[1 rows x 23 columns]
+Resultados para a janela: 32
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+32   pop  Online   2904.0  ...        60.003324       4168.997939  49.815622
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+32   pop  Always Hot   2904.0  ...        60.003324       4168.997939  49.815622
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+32   pop  Always Warm   2904.0  ...        60.003324       4168.997939  49.815622
+
+[1 rows x 23 columns]
+Resultados para a janela: 33
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+33   pop  Online   2975.0  ...         61.56326       3212.175408  50.689182
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+33   pop  Always Hot   2975.0  ...         61.56326       3212.175408  50.689182
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+33   pop  Always Warm   2975.0  ...         61.56326       3212.175408  50.689182
+
+[1 rows x 23 columns]
+Resultados para a janela: 34
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+34   pop  Online   3057.0  ...        63.329922       3234.986518  52.007904
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+34   pop  Always Hot   3057.0  ...        63.329922       3234.986518  52.007904
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+34   pop  Always Warm   3057.0  ...        63.329922       3234.986518  52.007904
+
+[1 rows x 23 columns]
+Resultados para a janela: 35
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+35   pop  Online   3125.0  ...         64.86948       3000.546212  51.464775
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+35   pop  Always Hot   3125.0  ...         64.86948       3000.546212  51.464775
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+35   pop  Always Warm   3125.0  ...         64.86948       3000.546212  51.464775
+
+[1 rows x 23 columns]
+Resultados para a janela: 36
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+36   pop  Online   3177.0  ...        67.598387       3292.437175  55.326011
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+36   pop  Always Hot   3177.0  ...        67.598387       3292.437175  55.326011
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+36   pop  Always Warm   3177.0  ...        67.598387       3292.437175  55.326011
+
+[1 rows x 23 columns]
+Resultados para a janela: 37
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+37   pop  Online   3257.0  ...        70.920705       3378.893162  57.908716
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+37   pop  Always Hot   3257.0  ...        70.920705       3378.893162  57.908716
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+37   pop  Always Warm   3257.0  ...        70.920705       3378.893162  57.908716
+
+[1 rows x 23 columns]
+Resultados para a janela: 38
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+38   pop  Online   3339.0  ...        73.929755       3899.916747  59.728732
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+38   pop  Always Hot   3339.0  ...        73.929755       3899.916747  59.728732
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+38   pop  Always Warm   3339.0  ...        73.929755       3899.916747  59.728732
+
+[1 rows x 23 columns]
+Resultados para a janela: 39
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+39   pop  Online   3419.0  ...        79.020306       4681.113516  65.791507
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+39   pop  Always Hot   3419.0  ...        79.020306       4681.113516  65.791507
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+39   pop  Always Warm   3419.0  ...        79.020306       4681.113516  65.791507
+
+[1 rows x 23 columns]
+Resultados para a janela: 40
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+40   pop  Online   3497.0  ...        82.389687       4625.585962  67.688569
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+40   pop  Always Hot   3497.0  ...        82.389687       4625.585962  67.688569
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+40   pop  Always Warm   3497.0  ...        82.389687       4625.585962  67.688569
+
+[1 rows x 23 columns]
+Resultados para a janela: 41
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+41   pop  Online   3548.0  ...        84.120343       2623.073359  66.702512
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+41   pop  Always Hot   3548.0  ...        84.120343       2623.073359  66.702512
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+41   pop  Always Warm   3548.0  ...        84.120343       2623.073359  66.702512
+
+[1 rows x 23 columns]
+Resultados para a janela: 42
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+42   pop  Online   3585.0  ...        85.701079       3057.466423  69.989061
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+42   pop  Always Hot   3585.0  ...        85.701079       3057.466423  69.989061
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+42   pop  Always Warm   3585.0  ...        85.701079       3057.466423  69.989061
+
+[1 rows x 23 columns]
+Resultados para a janela: 43
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+43   pop  Online   3652.0  ...         88.26318      14790.033244  72.116599
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+43   pop  Always Hot   3652.0  ...         88.26318      14790.033244  72.116599
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+43   pop  Always Warm   3652.0  ...         88.26318      14790.033244  72.116599
+
+[1 rows x 23 columns]
+Resultados para a janela: 44
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+44   pop  Online   3722.0  ...        90.428379       5148.807724  74.575943
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+44   pop  Always Hot   3722.0  ...        90.428379       5148.807724  74.575943
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+44   pop  Always Warm   3722.0  ...        90.428379       5148.807724  74.575943
+
+[1 rows x 23 columns]
+Resultados para a janela: 45
+   Dados   Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+45   pop  Online   3802.0  ...        92.157518       7449.929246  74.115864
+
+[1 rows x 23 columns]
+   Dados       Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+45   pop  Always Hot   3802.0  ...        92.157518       7449.929246  74.115864
+
+[1 rows x 23 columns]
+   Dados        Model  Qtd obj  ...  cost always hot  cost always warm   cost opt
+45   pop  Always Warm   3802.0  ...        92.157518       7449.929246  74.115864
+
+[1 rows x 23 columns]

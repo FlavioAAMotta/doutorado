@@ -1,5 +1,4 @@
-# This file is responsible for the creation of the model. The model can be an RF, SVM with different kernels, LR or a DT.
-# The model is created using the sklearn library. 
+# classifiers.py
 
 import numpy as np
 from sklearn import svm
@@ -10,7 +9,6 @@ from sklearn.tree import DecisionTreeClassifier
 import pandas as pd
 from sklearn.model_selection import GridSearchCV
 from genetic_programming_classifier import GeneticProgrammingClassifier
-
 
 def get_default_classifiers(probability=True, random_state=42, n_neighbors=4):
 
@@ -26,7 +24,8 @@ def get_default_classifiers(probability=True, random_state=42, n_neighbors=4):
             generations=100,
             max_depth=5,
             random_state=random_state
-        ),        "LR": LogisticRegression(n_jobs=-1),
+        ),
+        "LR": LogisticRegression(n_jobs=-1),
     }
 
     voting_clf = VotingClassifier(list(default_clfs.items()), voting="soft", n_jobs=-1)
@@ -47,8 +46,6 @@ def get_default_classifiers(probability=True, random_state=42, n_neighbors=4):
         "SV-Grid": grid,
     }
 
-
-
 def set_classifier(clf_key, clfs_dict):
     clf = clfs_dict.get(clf_key, None)
     if clf is None:
@@ -56,4 +53,4 @@ def set_classifier(clf_key, clfs_dict):
     return clf
 
 def get_online_predictions(x_test):
-    return x_test.sum(axis=1).apply(lambda x: 1 if x >= 1 else 0)  
+    return x_test.sum(axis=1).apply(lambda x: 1 if x >= 1 else 0)
