@@ -63,23 +63,31 @@ def get_classifier_cost(row, costs, vol_gb, acc_fut):
     else:  # Predicted Warm
         costs["prediction"] += calculate_object_cost(vol_gb, acc_fut, Warm)
 
-def get_cost_of_classifiers(costs):
+# cost_calculation.py
+
+def get_cost_of_classifiers(costs, cost_online):
     prediction_cost = costs["prediction"]
     optimal_cost = costs["opt"]
     always_hot_cost = costs["always_H"]
     always_warm_cost = costs["always_W"]
 
+    # Handle the case where cost_online is None
+    if cost_online is None:
+        online_cost = prediction_cost  # For the Online method itself
+    else:
+        online_cost = cost_online
+
     # Evitar divisão por zero
-    if always_hot_cost == 0:
+    if online_cost == 0:
         rcs_ml = 0
         rcs_always_hot = 0
         rcs_always_warm = 0
         rcs_opt = 0
     else:
-        rcs_ml = (always_hot_cost - prediction_cost) / always_hot_cost
-        rcs_always_hot = 0  # (always_hot_cost - always_hot_cost) / always_hot_cost
-        rcs_always_warm = (always_hot_cost - always_warm_cost) / always_hot_cost
-        rcs_opt = (always_hot_cost - optimal_cost) / always_hot_cost
+        rcs_ml = (online_cost - prediction_cost) / online_cost
+        rcs_always_hot = (online_cost - always_hot_cost) / online_cost
+        rcs_always_warm = (online_cost - always_warm_cost) / online_cost
+        rcs_opt = (online_cost - optimal_cost) / online_cost
 
     return {
         "rcs ml": rcs_ml,
@@ -90,9 +98,11 @@ def get_cost_of_classifiers(costs):
         "cost always hot": always_hot_cost,
         "cost always warm": always_warm_cost,
         "cost opt": optimal_cost,
+        "cost online": online_cost,
     }
 
-def calculate_costs(df):
+
+def calculate_costs(df, cost_online=None):
     costs = defaultdict(float)  # default = 0
 
     for index, row in df.iterrows():
@@ -113,7 +123,7 @@ def calculate_costs(df):
         # Custo se sempre armazenado como Warm
         costs["always_W"] += calculate_object_cost(volume_per_gb, total_access, Warm)
 
-    return get_cost_of_classifiers(costs)
+    return get_cost_of_classifiers(costs, cost_online)
 
 def calculate_metrics(df, window=0, rel=False):
     y_true, y_pred = df["label"].values, df["pred"].values
@@ -137,15 +147,16 @@ def calculate_metrics(df, window=0, rel=False):
     }
     return pd.DataFrame(metrics, index=[window])
 
-def generate_results(df, window, log_id, classifier_name, FPPenaltyEnabled):
+def generate_results(df, window, log_id, classifier_name, FPPenaltyEnabled, cost_online=None):
     metrics_df = calculate_metrics(df, window)
-    costs = calculate_costs(df)
+    costs = calculate_costs(df, cost_online=cost_online)
 
     results = {
         "Dados": log_id,
         "Model": classifier_name,
+        "window": window,  # Add window to the results
         "Qtd obj": df.shape[0],
         **metrics_df.iloc[0].to_dict(),
         **costs,
     }
-    return pd.DataFrame(results, index=[window])
+    return pd.DataFrame([results])  # Return a DataFrame with a single row
