@@ -76,10 +76,6 @@ def calculate_costs(df, cost_online=None):
         total_access = row["acc_fut"]
         if volume_per_gb <= 0 or total_access < 0:
             continue
-        get_optimal_cost(total_access, volume_per_gb, costs)
-        get_classifier_cost(row, costs, volume_per_gb, total_access)
-        costs["always_H"] += calculate_object_cost(volume_per_gb, total_access, HOT)
-        costs["always_W"] += calculate_object_cost(volume_per_gb, total_access, WARM)
     return get_cost_of_classifiers(costs, cost_online)
 
 def get_cost_of_classifiers(costs, cost_online):

@@ -4,11 +4,11 @@ window_size: 4
 step_size: 4
 model: 'SVML'
 models_to_run:
-  # - 'SVMR'
+  - 'SVMR'
   - 'ONL'
-  # - 'SVML'
-  # - 'RF'
-  # - 'DCT'
-  # - 'KNN'
+  - 'SVML'
+  - 'RF'
+  - 'DCT'
+  - 'KNN'
   - 'LR'
 pop_name: 'Pop1'

@@ -71,8 +71,10 @@ class GeneticProgrammingClassifier(BaseEstimator, ClassifierMixin):
             # Ordena a população com base no fitness
             fitness_scores.sort(reverse=True, key=lambda x: x[0])
 
-            # Exibe o melhor fitness da geração atual
-            print(f"Geração {generation}: Melhor fitness = {fitness_scores[0][0]}")
+            best_fitness = fitness_scores[0][0]
+            best_individual = fitness_scores[0][1]
+            print(f"Geração {generation}: Melhor fitness = {best_fitness}")
+            print(f"Melhor indivíduo: {best_individual}")
 
             # Seleciona os melhores indivíduos
             survivors = [individual for (fitness, individual) in fitness_scores[:self.population_size // 2]]
@@ -114,4 +116,3 @@ class GeneticProgrammingClassifier(BaseEstimator, ClassifierMixin):
         epsilon = 1e-6
         fitness = 1 / (cost_ml + epsilon)
         return fitness
-

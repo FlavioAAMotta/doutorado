@@ -11,8 +11,7 @@ from utils.utilities import (
     apply_volume_filter,
     rename_columns,
     classify_by_access,
-    prepare_test_data,
-    evaluate_model,
+    prepare_test_data
 )
 from utils.cost_calculation import calculate_costs, generate_results
 from models.classifiers import get_default_classifiers, set_classifier
@@ -30,10 +29,6 @@ def compute_overall_metrics(results_list, filename):
         'FN': 'sum',
         'TN': 'sum',
         'cost ml': 'sum',
-        'cost online': 'sum',
-        'cost always hot': 'sum',
-        'cost always warm': 'sum',
-        'cost opt': 'sum',
         'Qtd obj': 'sum',
     }).reset_index()
 
@@ -55,23 +50,11 @@ def compute_overall_metrics(results_list, filename):
 
         # Custos
         cost_ml = row['cost ml']
-        cost_online = row['cost online']
-        cost_always_hot = row['cost always hot']
-        cost_always_warm = row['cost always warm']
-        cost_opt = row['cost opt']
-
-        # Calcular RCS
-        if cost_online != 0:
-            rcs_ml = (cost_online - cost_ml) / cost_online
-            rcs_always_hot = (cost_online - cost_always_hot) / cost_online
-            rcs_always_warm = (cost_online - cost_always_warm) / cost_online
-            rcs_opt = (cost_online - cost_opt) / cost_online
-        else:
-            rcs_ml = rcs_always_hot = rcs_always_warm = rcs_opt = 0.0
 
         overall_metrics.append({
             'Model': model_name,
             'Total Samples': total_samples,
+            'cost ml': cost_ml,
             'Accuracy': accuracy,
             'Precision': precision,
             'Recall': recall,
@@ -80,15 +63,6 @@ def compute_overall_metrics(results_list, filename):
             'FP': FP,
             'FN': FN,
             'TN': TN,
-            'cost ml': cost_ml,
-            'cost online': cost_online,
-            'cost always hot': cost_always_hot,
-            'cost always warm': cost_always_warm,
-            'cost opt': cost_opt,
-            'rcs ml': rcs_ml,
-            'rcs always hot': rcs_always_hot,
-            'rcs always warm': rcs_always_warm,
-            'rcs opt': rcs_opt,
         })
 
     overall_df = pd.DataFrame(overall_metrics)
