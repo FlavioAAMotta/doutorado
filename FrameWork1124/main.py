@@ -165,10 +165,10 @@ for window in windows:
         oracle_cost = calculate_cost(y_test, y_test, HOT_STORAGE_COST, HOT_OPERATION_COST, HOT_RETRIEVAL_COST)
 
         # Armazena resultados acumulativos
-        cumulative_results[model_name]['accuracy'].append(accuracy)
-        cumulative_results[model_name]['precision'].append(precision)
-        cumulative_results[model_name]['recall'].append(recall)
-        cumulative_results[model_name]['f1'].append(f1)
+        # cumulative_results[model_name]['accuracy'].append(accuracy)
+        # cumulative_results[model_name]['precision'].append(precision)
+        # cumulative_results[model_name]['recall'].append(recall)
+        # cumulative_results[model_name]['f1'].append(f1)
         cumulative_results[model_name]['model_cost'].append(model_cost)
         cumulative_results[model_name]['oracle_cost'].append(oracle_cost)
         cumulative_results[model_name]['confusion_matrix'] += confusion
@@ -185,27 +185,38 @@ for window in windows:
         print(f"Custo do Oráculo: {oracle_cost:.2f}")
         print("---------------------------------")
 
-# Cálculo dos resultados finais acumulados
 final_results = {}
+# Cálculo dos resultados finais acumulados
 for model_name in models_to_run:
+    # Get the accumulated confusion matrix
+    cm = cumulative_results[model_name]['confusion_matrix']
+    tn, fp, fn, tp = cm.ravel()
+
+    # Compute metrics
+    accuracy = (tp + tn) / (tp + tn + fp + fn)
+    precision = tp / (tp + fp) if (tp + fp) > 0 else 0
+    recall = tp / (tp + fn) if (tp + fn) > 0 else 0
+    f1 = (2 * precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
+
+    # Store the final results
     final_results[model_name] = {
-        'accuracy': np.mean(cumulative_results[model_name]['accuracy']),
-        'precision': np.mean(cumulative_results[model_name]['precision']),
-        'recall': np.mean(cumulative_results[model_name]['recall']),
-        'f1': np.mean(cumulative_results[model_name]['f1']),
+        'accuracy': accuracy,
+        'precision': precision,
+        'recall': recall,
+        'f1': f1,
         'model_cost': np.sum(cumulative_results[model_name]['model_cost']),
         'oracle_cost': np.sum(cumulative_results[model_name]['oracle_cost']),
-        'confusion_matrix': cumulative_results[model_name]['confusion_matrix'].tolist()
+        'confusion_matrix': cm.tolist()
     }
 
-# Impressão dos resultados finais
+# Printing the final results
 print("\nResultados Finais Acumulativos:")
 for model_name, results in final_results.items():
     print(f"Modelo: {model_name}")
-    print(f"Acurácia Média: {results['accuracy']:.2f}")
-    print(f"Precisão Média: {results['precision']:.2f}")
-    print(f"Recall Médio: {results['recall']:.2f}")
-    print(f"F1 Score Médio: {results['f1']:.2f}")
+    print(f"Acurácia: {results['accuracy']:.2f}")
+    print(f"Precisão: {results['precision']:.2f}")
+    print(f"Recall: {results['recall']:.2f}")
+    print(f"F1 Score: {results['f1']:.2f}")
     print(f"Custo Total do Modelo: {results['model_cost']:.2f}")
     print(f"Custo Total do Oráculo: {results['oracle_cost']:.2f}")
     print(f"Matriz de Confusão Acumulada: {results['confusion_matrix']}")
