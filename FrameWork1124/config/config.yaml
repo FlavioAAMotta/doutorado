@@ -4,6 +4,8 @@ window_size: 4
 step_size: 4
 model: 'SVML'
 models_to_run:
+  - 'AHL'  # Always Hot
+  - 'AWL'  # Always Warm
   - 'SVMR'
   - 'ONL'
   - 'SVML'
@@ -11,4 +13,4 @@ models_to_run:
   - 'DCT'
   - 'KNN'
   - 'LR'
-pop_name: 'Pop1'
+pop_name: 'Pop2'

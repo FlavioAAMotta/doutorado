@@ -1,13 +1,11 @@
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from imblearn.over_sampling import SMOTE
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score
 from data_loader import DataLoader
 from models.classifiers import get_default_classifiers, set_classifier
 import os
-import datetime
 import json
 
 # Definindo constantes da AWS
@@ -142,6 +140,12 @@ for window in windows:
         if model_name == 'ONL':
             # Modelo Online: prever 1 se houver acesso na janela de leitura, caso contrário prever 0
             y_pred = (test_data.sum(axis=1) >= 1).astype(int).values
+        elif model_name == 'AHL':
+            # Always Hot: always predict 1 (HOT)
+            y_pred = np.ones_like(y_test)
+        elif model_name == 'AWL':
+            # Always Warm: always predict 0 (WARM)
+            y_pred = np.zeros_like(y_test)
         else:
             model = set_classifier(model_name, classifiers)
             model.fit(X_train_scaled, y_train_bal)
@@ -205,10 +209,10 @@ for model_name in models_to_run:
 print("\nResultados Finais Acumulativos:")
 for model_name, results in final_results.items():
     print(f"Modelo: {model_name}")
-    print(f"Acurácia: {results['accuracy']:.2f}")
-    print(f"Precisão: {results['precision']:.2f}")
-    print(f"Recall: {results['recall']:.2f}")
-    print(f"F1 Score: {results['f1']:.2f}")
+    print(f"Acurácia: {results['accuracy']:.4f}")
+    print(f"Precisão: {results['precision']:.4f}")
+    print(f"Recall: {results['recall']:.4f}")
+    print(f"F1 Score: {results['f1']:.4f}")
     print(f"Custo Total do Modelo: {results['model_cost']:.2f}")
     print(f"Custo Total do Oráculo: {results['oracle_cost']:.2f}")
     print(f"Matriz de Confusão Acumulada: {results['confusion_matrix']}")
@@ -224,10 +228,10 @@ with open(output_txt_path, 'w') as file:
     file.write("Resultados Finais Acumulativos:\n")
     for model_name, results in final_results.items():
         file.write(f"Modelo: {model_name}\n")
-        file.write(f"Acurácia: {results['accuracy']:.2f}\n")
-        file.write(f"Precisão: {results['precision']:.2f}\n")
-        file.write(f"Recall: {results['recall']:.2f}\n")
-        file.write(f"F1 Score: {results['f1']:.2f}\n")
+        file.write(f"Acurácia: {results['accuracy']:.4f}\n")
+        file.write(f"Precisão: {results['precision']:.4f}\n")
+        file.write(f"Recall: {results['recall']:.4f}\n")
+        file.write(f"F1 Score: {results['f1']:.4f}\n")
         file.write(f"Custo Total do Modelo: {results['model_cost']:.2f}\n")
         file.write(f"Custo Total do Oráculo: {results['oracle_cost']:.2f}\n")
         file.write(f"Matriz de Confusão Acumulada: {results['confusion_matrix']}\n")
