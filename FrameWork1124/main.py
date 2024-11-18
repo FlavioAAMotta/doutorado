@@ -41,11 +41,19 @@ df_volume.set_index('NameSpace', inplace=True)
 def get_time_windows(data, window_size, step_size):
     windows = []
     num_weeks = len(data.columns)
-    for start in range(0, num_weeks - window_size * 2, step_size):
-        train_start, train_end = start, start + window_size
-        label_train_start, label_train_end = train_end, train_end + window_size
-        test_start, test_end = label_train_end, label_train_end + window_size
-        label_test_start, label_test_end = test_end, test_end + window_size
+    total_window_size = window_size * 4  # Total size needed for train, label_train, test, label_test
+    for start in range(0, num_weeks - total_window_size + 1, step_size):
+        train_start = start
+        train_end = train_start + window_size
+
+        label_train_start = train_end
+        label_train_end = label_train_start + window_size
+
+        test_start = label_train_end
+        test_end = test_start + window_size
+
+        label_test_start = test_end
+        label_test_end = label_test_start + window_size
 
         windows.append({
             'train': (train_start, train_end),
@@ -168,7 +176,7 @@ for window in windows:
         # Impressão dos resultados
         print(f"Modelo: {model_name}")
         print(f"Janela {window}:")
-        print(f"Matriz de Confusão:{confusion}")
+        print(f"Matriz de Confusão:\n{confusion}")
         print(f"Acurácia: {accuracy:.2f}")
         print(f"Precisão: {precision:.2f}")
         print(f"Recall: {recall:.2f}")
@@ -204,8 +212,8 @@ for model_name, results in final_results.items():
     print("---------------------------------")
 
 # Salvando os resultados finais em arquivos
-timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-output_dir = os.path.join('results', f'results_{timestamp}')
+# timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+output_dir = os.path.join('results', f'results_{pop_name}_{window_size}_{step_size}')
 os.makedirs(output_dir, exist_ok=True)
 
 # Salvando em formato de texto
