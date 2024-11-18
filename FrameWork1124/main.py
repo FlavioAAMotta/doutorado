@@ -97,10 +97,6 @@ def calculate_cost(predictions, actuals, storage_cost, operation_cost, retrieval
 cumulative_results = {}
 for model_name in models_to_run:
     cumulative_results[model_name] = {
-        'accuracy': [],
-        'precision': [],
-        'recall': [],
-        'f1': [],
         'model_cost': [],
         'oracle_cost': [],
         'confusion_matrix': np.zeros((2, 2), dtype=int)
@@ -165,10 +161,6 @@ for window in windows:
         oracle_cost = calculate_cost(y_test, y_test, HOT_STORAGE_COST, HOT_OPERATION_COST, HOT_RETRIEVAL_COST)
 
         # Armazena resultados acumulativos
-        # cumulative_results[model_name]['accuracy'].append(accuracy)
-        # cumulative_results[model_name]['precision'].append(precision)
-        # cumulative_results[model_name]['recall'].append(recall)
-        # cumulative_results[model_name]['f1'].append(f1)
         cumulative_results[model_name]['model_cost'].append(model_cost)
         cumulative_results[model_name]['oracle_cost'].append(oracle_cost)
         cumulative_results[model_name]['confusion_matrix'] += confusion
@@ -223,7 +215,6 @@ for model_name, results in final_results.items():
     print("---------------------------------")
 
 # Salvando os resultados finais em arquivos
-# timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 output_dir = os.path.join('results', f'results_{pop_name}_{window_size}_{step_size}')
 os.makedirs(output_dir, exist_ok=True)
 
@@ -233,13 +224,13 @@ with open(output_txt_path, 'w') as file:
     file.write("Resultados Finais Acumulativos:\n")
     for model_name, results in final_results.items():
         file.write(f"Modelo: {model_name}\n")
-        file.write(f"Acurácia Média: {results['accuracy']:.2f}\n")
-        file.write(f"Precisão Média: {results['precision']:.2f}\n")
-        file.write(f"Recall Médio: {results['recall']:.2f}\n")
-        file.write(f"F1 Score Médio: {results['f1']:.2f}\n")
+        file.write(f"Acurácia: {results['accuracy']:.2f}\n")
+        file.write(f"Precisão: {results['precision']:.2f}\n")
+        file.write(f"Recall: {results['recall']:.2f}\n")
+        file.write(f"F1 Score: {results['f1']:.2f}\n")
         file.write(f"Custo Total do Modelo: {results['model_cost']:.2f}\n")
         file.write(f"Custo Total do Oráculo: {results['oracle_cost']:.2f}\n")
-        file.write(f"Matrizes de Confusão: {results['confusion_matrix']}\n")
+        file.write(f"Matriz de Confusão Acumulada: {results['confusion_matrix']}\n")
         file.write("---------------------------------\n")
 
 # Salvando em formato JSON
@@ -247,4 +238,33 @@ output_json_path = os.path.join(output_dir, 'resultados_finais.json')
 with open(output_json_path, 'w') as file:
     json.dump(final_results, file, indent=4)
 
+# Salvando em formato CSV
+# Prepare data for CSV
+results_for_csv = []
+for model_name, results in final_results.items():
+    cm = results['confusion_matrix']
+    tn, fp, fn, tp = cm[0][0], cm[0][1], cm[1][0], cm[1][1]
+    result_row = {
+        'model_name': model_name,
+        'accuracy': results['accuracy'],
+        'precision': results['precision'],
+        'recall': results['recall'],
+        'f1_score': results['f1'],
+        'model_cost': results['model_cost'],
+        'oracle_cost': results['oracle_cost'],
+        'tn': tn,
+        'fp': fp,
+        'fn': fn,
+        'tp': tp
+    }
+    results_for_csv.append(result_row)
+
+# Convert the results to a DataFrame
+results_df = pd.DataFrame(results_for_csv)
+
+# Save the DataFrame to CSV
+output_csv_path = os.path.join(output_dir, 'resultados_finais.csv')
+results_df.to_csv(output_csv_path, index=False)
+
 print(f"Resultados finais salvos em {output_dir}")
+print(f"Resultados finais salvos em CSV: {output_csv_path}")
