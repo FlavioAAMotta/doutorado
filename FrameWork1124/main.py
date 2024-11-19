@@ -79,16 +79,23 @@ def filter_by_volume(df, df_volume, start_week):
 def get_label(data):
     return (data.sum(axis=1) >= 1).astype(int)
 
+additional_fn_loss = 0.01
+fp_penalty = (HOT_STORAGE_COST - WARM_STORAGE_COST) + (HOT_OPERATION_COST - WARM_OPERATION_COST)
+fn_penalty = WARM_RETRIEVAL_COST + additional_fn_loss
 # Função para calcular o custo do modelo
-def calculate_cost(predictions, actuals, storage_cost, operation_cost, retrieval_cost):
+def calculate_cost(predictions, actuals):
     total_cost = 0
     for pred, actual in zip(predictions, actuals):
         if pred == HOT:
             total_cost += HOT_STORAGE_COST + HOT_OPERATION_COST
+            if actual == WARM:
+                # False Positive
+                total_cost += fp_penalty
         else:
             total_cost += WARM_STORAGE_COST + WARM_OPERATION_COST
             if actual == HOT:
-                total_cost += WARM_RETRIEVAL_COST
+                # False Negative
+                total_cost += fn_penalty
     return total_cost
 
 # Inicializa acumuladores de resultados
@@ -161,8 +168,8 @@ for window in windows:
         f1 = f1_score(y_test, y_pred, average='weighted', zero_division=0)
 
         # Cálculo do custo do modelo e custo do oráculo
-        model_cost = calculate_cost(y_pred, y_test, HOT_STORAGE_COST, HOT_OPERATION_COST, HOT_RETRIEVAL_COST)
-        oracle_cost = calculate_cost(y_test, y_test, HOT_STORAGE_COST, HOT_OPERATION_COST, HOT_RETRIEVAL_COST)
+        model_cost = calculate_cost(y_pred, y_test)
+        oracle_cost = calculate_cost(y_test, y_test)
 
         # Armazena resultados acumulativos
         cumulative_results[model_name]['model_cost'].append(model_cost)
