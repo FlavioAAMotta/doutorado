@@ -14,6 +14,23 @@ HOT_STORAGE_COST, WARM_STORAGE_COST = 0.0230, 0.0125
 HOT_OPERATION_COST, WARM_OPERATION_COST = 0.0004, 0.0010
 HOT_RETRIEVAL_COST, WARM_RETRIEVAL_COST = 0.0000, 0.0100
 
+# Latency Model Parameters
+
+# Probabilities
+P_hit_hot = 0.7   # Probability of cache hit for HOT storage
+P_hit_warm = 0.3  # Probability of cache hit for WARM storage
+
+# Times in milliseconds
+T_cache_hit = 0.5   # Average time for cache hit (ms)
+T_disk_hot = 5.0    # Average disk access time for HOT storage (ms)
+T_disk_warm = 20.0  # Average disk access time for WARM storage (ms)
+
+T_proc = 0.5        # Average processing time (ms)
+
+# System Parameters
+N = 1             # Number of concurrent requests
+C = 1             # System processing capacity (threads or instances)
+
 # Carrega Dados e Parâmetros
 data_loader = DataLoader(data_dir='data/', config_path='config/config.yaml')
 
@@ -34,6 +51,39 @@ df_volume = data_loader.load_volume_data(pop_name)
 # Ajusta os índices dos DataFrames para o campo de objetos
 df_access.set_index('NameSpace', inplace=True)
 df_volume.set_index('NameSpace', inplace=True)
+
+def calculate_latency(predictions, access_counts):
+    total_latency = 0.0
+    for pred, access_count in zip(predictions, access_counts):
+        if access_count == 0:
+            continue  # No accesses, so no latency to calculate
+        if pred == HOT:
+            # For HOT storage
+            P_hit = P_hit_hot
+            T_disk = T_disk_hot
+        else:
+            # For WARM storage
+            P_hit = P_hit_warm
+            T_disk = T_disk_warm
+        
+        P_miss = 1 - P_hit
+
+        # Calculate latency components per access
+        L_cache = P_hit * T_cache_hit
+        L_disk = P_miss * T_disk
+        L_processing = T_proc
+        L_queue = (N * T_proc) / C  # Adjust N and C as needed
+
+        # Total latency per access
+        L_total_per_access = L_cache + L_disk + L_processing + L_queue
+
+        # Total latency for all accesses of the object
+        L_total_object = access_count * L_total_per_access
+
+        total_latency += L_total_object
+    return total_latency
+
+
 
 # Calculo de Janelas Temporais
 def get_time_windows(data, window_size, step_size):
@@ -104,6 +154,8 @@ for model_name in models_to_run:
     cumulative_results[model_name] = {
         'model_cost': [],
         'oracle_cost': [],
+        'model_latency': [],  # New accumulator for model latency
+        'oracle_latency': [],  # New accumulator for oracle latency
         'confusion_matrix': np.zeros((2, 2), dtype=int)
     }
 
@@ -159,6 +211,15 @@ for window in windows:
 
             # Previsão
             y_pred = model.predict(X_test_scaled)
+            
+        access_counts = label_test_data.sum(axis=1)  # Sum over the weeks to get total accesses per object
+        # Calculate latency
+        model_latency = calculate_latency(y_pred, access_counts)
+        oracle_latency = calculate_latency(y_test, access_counts)  # Oracle latency with perfect predictions
+
+        # Accumulate latency results
+        cumulative_results[model_name]['model_latency'].append(model_latency)
+        cumulative_results[model_name]['oracle_latency'].append(oracle_latency)
 
         # Avaliação do modelo
         confusion = confusion_matrix(y_test, y_pred)
@@ -200,6 +261,10 @@ for model_name in models_to_run:
     precision = tp / (tp + fp) if (tp + fp) > 0 else 0
     recall = tp / (tp + fn) if (tp + fn) > 0 else 0
     f1 = (2 * precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
+    
+    # Calculate total latency
+    total_model_latency = np.sum(cumulative_results[model_name]['model_latency'])
+    total_oracle_latency = np.sum(cumulative_results[model_name]['oracle_latency'])
 
     # Store the final results
     final_results[model_name] = {
@@ -209,6 +274,8 @@ for model_name in models_to_run:
         'f1': f1,
         'model_cost': np.sum(cumulative_results[model_name]['model_cost']),
         'oracle_cost': np.sum(cumulative_results[model_name]['oracle_cost']),
+        'model_latency': total_model_latency,
+        'oracle_latency': total_oracle_latency,
         'confusion_matrix': cm.tolist()
     }
 
@@ -222,6 +289,8 @@ for model_name, results in final_results.items():
     print(f"F1 Score: {results['f1']:.4f}")
     print(f"Custo Total do Modelo: {results['model_cost']:.2f}")
     print(f"Custo Total do Oráculo: {results['oracle_cost']:.2f}")
+    print(f"Latência Total do Modelo: {results['model_latency']:.2f} ms")
+    print(f"Latência Total do Oráculo: {results['oracle_latency']:.2f} ms")
     print(f"Matriz de Confusão Acumulada: {results['confusion_matrix']}")
     print("---------------------------------")
 
@@ -241,6 +310,8 @@ with open(output_txt_path, 'w') as file:
         file.write(f"F1 Score: {results['f1']:.4f}\n")
         file.write(f"Custo Total do Modelo: {results['model_cost']:.2f}\n")
         file.write(f"Custo Total do Oráculo: {results['oracle_cost']:.2f}\n")
+        file.write(f"Latência Total do Modelo: {results['model_latency']:.2f} ms\n")
+        file.write(f"Latência Total do Oráculo: {results['oracle_latency']:.2f} ms\n")
         file.write(f"Matriz de Confusão Acumulada: {results['confusion_matrix']}\n")
         file.write("---------------------------------\n")
 
@@ -263,6 +334,8 @@ for model_name, results in final_results.items():
         'f1_score': results['f1'],
         'model_cost': results['model_cost'],
         'oracle_cost': results['oracle_cost'],
+        'model_latency': results['model_latency'],
+        'oracle_latency': results['oracle_latency'],
         'tn': tn,
         'fp': fp,
         'fn': fn,
