@@ -6,11 +6,17 @@ model: 'SVML'
 models_to_run:
   - 'AHL'  # Always Hot
   - 'AWL'  # Always Warm
-  - 'SVMR'
-  - 'ONL'
-  - 'SVML'
-  - 'RF'
-  - 'DCT'
-  - 'KNN'
-  - 'LR'
+  - 'ONL'  # Online
+  - 'SVMR' # SVM with RBF kernel
+  - 'SVML' # SVM with Linear kernel
+  - 'RF'   # Random Forest
+  - 'DCT'  # Decision Tree
+  - 'KNN'  # K-Nearest Neighbors
+  - 'LR'   # Logistic Regression
+  - 'GBC'  # Gradient Boosting
+  - 'ABC'  # AdaBoost
+  - 'ETC'  # Extra Trees
+  - 'MLP'  # Neural Network
+  - 'XGB'  # XGBoost
+  - 'LGBM' # LightGBM
 pop_name: 'Pop2'
