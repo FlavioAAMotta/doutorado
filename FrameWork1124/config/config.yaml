@@ -20,3 +20,10 @@ models_to_run:
   - 'XGB'  # XGBoost
   - 'LGBM' # LightGBM
 pop_name: 'Pop2'
+
+# User profile configuration
+user_profile:
+  type: 'C'  # Default to balanced profile
+  custom_weights:  # Optional custom weights
+    price_weight: 0.5
+    latency_weight: 0.5
