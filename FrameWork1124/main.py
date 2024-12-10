@@ -171,28 +171,17 @@ def calculate_cost(predictions, actuals):
                 total_cost += fn_penalty
     return total_cost
 
-# Near the top of the file, after loading the base parameters
-profiles = [
-    UserProfile(20),  # 20/80 - Conservative with HOT predictions
-    UserProfile(50),  # 50/50 - Balanced
-    UserProfile(80),  # 80/20 - Aggressive with HOT predictions
-]
-
-# Initialize results for each profile
-cumulative_results = {}
-for profile in profiles:
-    for model_name in models_to_run:
-        profile_key = f"{model_name}_{int(profile.cost_weight*100)}"
-        cumulative_results[profile_key] = {
-            'model_cost': [],
-            'oracle_cost': [],
-            'model_latency': [],
-            'oracle_latency': [],
-            'confusion_matrix': np.zeros((2, 2), dtype=int)
-        }
-
-# In the training loop, test each profile
-for window in windows:
+def run_analysis(window, user_profile):
+    """
+    Run analysis for a specific window and user profile
+    
+    Args:
+        window: Dictionary containing window indices
+        user_profile: UserProfile instance with cost/latency preferences
+    
+    Returns:
+        Dictionary containing results for each model
+    """
     # Extração das janelas de treinamento e teste
     train_data = extract_data(df_access, *window['train'])
     label_train_data = extract_data(df_access, *window['label_train'])
@@ -205,90 +194,84 @@ for window in windows:
         label_train_data = label_train_data.loc[train_data.index]
     except KeyError as e:
         print(e)
-        continue
+        return {}
 
-    # Obtendo rótulos binários para as janelas de treinamento e teste
+    # Preparação dos dados
     y_train = get_label(label_train_data)
     y_test = get_label(label_test_data)
-
-    # Verificação de tamanho consistente entre X e y
+    
     if len(train_data) != len(y_train):
         print(f"Tamanho inconsistente entre treino e rótulo: {len(train_data)} vs {len(y_train)}")
-        continue
+        return {}
 
-    # Oráculo e balanceamento de classes com SMOTE
+    # SMOTE e normalização
     smote = SMOTE()
     X_train = train_data.values
     X_train_bal, y_train_bal = smote.fit_resample(X_train, y_train)
-
-    # Normalização dos dados
+    
     scaler = StandardScaler()
     X_train_scaled = scaler.fit_transform(X_train_bal)
     X_test_scaled = scaler.transform(test_data.values)
 
-    # Treinamento do modelo para cada modelo e perfil
+    # Resultados para cada modelo
+    results = {}
+    
     for model_name in models_to_run:
-        for profile in profiles:
-            profile_key = f"{model_name}_{int(profile.cost_weight*100)}"
-            
-            if model_name == 'ONL':
-                y_pred = (test_data.sum(axis=1) >= 1).astype(int).values
-            elif model_name == 'AHL':
-                y_pred = np.ones_like(y_test)
-            elif model_name == 'AWL':
-                y_pred = np.zeros_like(y_test)
-            else:
-                model = set_classifier(model_name, classifiers)
-                model.fit(X_train_scaled, y_train_bal)
-                y_prob = model.predict_proba(X_test_scaled)
-                y_pred = (y_prob[:, 1] >= profile.decision_threshold).astype(int)
-            
-            access_counts = label_test_data.sum(axis=1)
-            volumes = test_data.index.map(lambda x: df_volume.loc[x, df_volume.columns[-1]])
-            
-            # Calculate metrics
-            cost = calculate_cost(y_pred, y_test)
-            latency = calculate_latency(y_pred, access_counts, volumes)
-            oracle_cost = calculate_cost(y_test, y_test)
-            oracle_latency = calculate_latency(y_test, access_counts, volumes)
-
-            # Store results
-            cumulative_results[profile_key]['model_cost'].append(cost)
-            cumulative_results[profile_key]['oracle_cost'].append(oracle_cost)
-            cumulative_results[profile_key]['model_latency'].append(latency)
-            cumulative_results[profile_key]['oracle_latency'].append(oracle_latency)
-            cumulative_results[profile_key]['confusion_matrix'] += confusion_matrix(y_test, y_pred)
-
-            # Print results for this window
-            print(f"\nModelo: {model_name} - Profile: {int(profile.cost_weight*100)}//{int(profile.latency_weight*100)}")
-            print(f"Cost: {cost:.4f}, Latency: {latency:.4f}")
+        if model_name == 'ONL':
+            y_pred = (test_data.sum(axis=1) >= 1).astype(int).values
+        elif model_name == 'AHL':
+            y_pred = np.ones_like(y_test)
+        elif model_name == 'AWL':
+            y_pred = np.zeros_like(y_test)
+        else:
+            model = set_classifier(model_name, classifiers)
+            model.fit(X_train_scaled, y_train_bal)
+            y_prob = model.predict_proba(X_test_scaled)
+            y_pred = (y_prob[:, 1] >= user_profile.decision_threshold).astype(int)
+        
+        access_counts = label_test_data.sum(axis=1)
+        volumes = test_data.index.map(lambda x: df_volume.loc[x, df_volume.columns[-1]])
+        
+        # Calculate metrics
+        results[model_name] = {
+            'cost': calculate_cost(y_pred, y_test),
+            'latency': calculate_latency(y_pred, access_counts, volumes),
+            'oracle_cost': calculate_cost(y_test, y_test),
+            'oracle_latency': calculate_latency(y_test, access_counts, volumes),
+            'confusion_matrix': confusion_matrix(y_test, y_pred)
+        }
+    
+    return results
 
 # Prepare final results
 final_results = {}
-for profile_key, results in cumulative_results.items():
-    model_name, cost_weight = profile_key.split('_')
-    cm = results['confusion_matrix']
-    tn, fp, fn, tp = cm.ravel()
-    
-    # Compute metrics
-    accuracy = (tp + tn) / (tp + tn + fp + fn) if (tp + tn + fp + fn) > 0 else 0
-    precision = tp / (tp + fp) if (tp + fp) > 0 else 0
-    recall = tp / (tp + fn) if (tp + fn) > 0 else 0
-    f1 = (2 * precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
-    
-    final_results[profile_key] = {
-        'model_name': model_name,
-        'cost_weight': cost_weight,
-        'accuracy': accuracy,
-        'precision': precision,
-        'recall': recall,
-        'f1': f1,
-        'model_cost': np.sum(results['model_cost']),
-        'oracle_cost': np.sum(results['oracle_cost']),
-        'model_latency': np.sum(results['model_latency']),
-        'oracle_latency': np.sum(results['oracle_latency']),
-        'confusion_matrix': cm.tolist()
-    }
+for window in windows:
+    results = run_analysis(window, user_profile)
+    for model_name, result in results.items():
+        profile_key = f"{model_name}_{int(user_profile.cost_weight*100)}"
+        
+        # Get y_true and y_pred from confusion matrix
+        cm = result['confusion_matrix']
+        y_true = []
+        y_pred = []
+        for i in range(2):
+            for j in range(2):
+                y_true.extend([i] * cm[i][j])
+                y_pred.extend([j] * cm[i][j])
+                
+        final_results[profile_key] = {
+            'model_name': model_name,
+            'cost_weight': user_profile.cost_weight,
+            'accuracy': accuracy_score(y_true, y_pred),
+            'precision': precision_score(y_true, y_pred),
+            'recall': recall_score(y_true, y_pred),
+            'f1': f1_score(y_true, y_pred),
+            'model_cost': result['cost'],
+            'oracle_cost': result['oracle_cost'],
+            'model_latency': result['latency'],
+            'oracle_latency': result['oracle_latency'],
+            'confusion_matrix': cm.tolist()
+        }
 
 # Save results to CSV with profile information
 results_for_csv = []

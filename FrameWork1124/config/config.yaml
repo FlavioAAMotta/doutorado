@@ -9,8 +9,18 @@ models_to_run:
   - 'SVMR'
   - 'ONL'
   - 'LR'
-pop_name: 'Pop2'
+  - 'SVML' # SVM with Linear kernel
+  - 'RF'   # Random Forest
+  - 'DCT'  # Decision Tree
+  - 'KNN'  # K-Nearest Neighbors
+  - 'GBC'  # Gradient Boosting
+  - 'ABC'  # AdaBoost
+  - 'ETC'  # Extra Trees
+  - 'MLP'  # Neural Network
+  - 'XGB'  # XGBoost
+  - 'LGBM' # LightGBM
+pop_name: 'Pop1'
 
 # User Profile Configuration
-profile:
-  cost_weight: 20  # Value between 1-99, latency_weight will be (100 - cost_weight)
+# profile:
+#   cost_weight: 20  # Value between 1-99, latency_weight will be (100 - cost_weight)
