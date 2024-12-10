@@ -7,6 +7,7 @@ from data_loader import DataLoader
 from models.classifiers import get_default_classifiers, set_classifier
 import os
 import json
+from models.user_profiles import UserProfile
 
 # Definindo constantes da AWS
 WARM, HOT = 0, 1
@@ -52,19 +53,40 @@ df_volume = data_loader.load_volume_data(pop_name)
 df_access.set_index('NameSpace', inplace=True)
 df_volume.set_index('NameSpace', inplace=True)
 
-def calculate_latency(predictions, access_counts):
+# Load user profile from config
+profile_config = data_loader.params.get('profile', {})
+cost_weight = profile_config.get('cost_weight', 50)  # Default to 50/50 if not specified
+user_profile = UserProfile(cost_weight)
+
+def calculate_latency(predictions, access_counts, volumes):
+    """
+    Calculate total latency considering object volumes
+    :param predictions: Array of predictions (HOT/WARM)
+    :param access_counts: Array of access counts per object
+    :param volumes: Array of object volumes in bytes
+    :return: Total latency in milliseconds
+    """
     total_latency = 0.0
-    for pred, access_count in zip(predictions, access_counts):
+    
+    # Base latency parameters (in ms/MB)
+    BASE_DISK_HOT = 0.1    # Base disk latency per MB for HOT
+    BASE_DISK_WARM = 0.4   # Base disk latency per MB for WARM
+    
+    for pred, access_count, volume_bytes in zip(predictions, access_counts, volumes):
         if access_count == 0:
             continue  # No accesses, so no latency to calculate
+            
+        # Convert volume to MB for latency calculation
+        volume_mb = volume_bytes / (1024 * 1024)
+        
         if pred == HOT:
             # For HOT storage
             P_hit = P_hit_hot
-            T_disk = T_disk_hot
+            T_disk = T_disk_hot + (BASE_DISK_HOT * volume_mb)
         else:
             # For WARM storage
             P_hit = P_hit_warm
-            T_disk = T_disk_warm
+            T_disk = T_disk_warm + (BASE_DISK_WARM * volume_mb)
         
         P_miss = 1 - P_hit
 
@@ -81,6 +103,7 @@ def calculate_latency(predictions, access_counts):
         L_total_object = access_count * L_total_per_access
 
         total_latency += L_total_object
+    
     return total_latency
 
 
@@ -148,18 +171,27 @@ def calculate_cost(predictions, actuals):
                 total_cost += fn_penalty
     return total_cost
 
-# Inicializa acumuladores de resultados
-cumulative_results = {}
-for model_name in models_to_run:
-    cumulative_results[model_name] = {
-        'model_cost': [],
-        'oracle_cost': [],
-        'model_latency': [],  # New accumulator for model latency
-        'oracle_latency': [],  # New accumulator for oracle latency
-        'confusion_matrix': np.zeros((2, 2), dtype=int)
-    }
+# Near the top of the file, after loading the base parameters
+profiles = [
+    UserProfile(20),  # 20/80 - Conservative with HOT predictions
+    UserProfile(50),  # 50/50 - Balanced
+    UserProfile(80),  # 80/20 - Aggressive with HOT predictions
+]
 
-# Treinamento e avaliação do modelo
+# Initialize results for each profile
+cumulative_results = {}
+for profile in profiles:
+    for model_name in models_to_run:
+        profile_key = f"{model_name}_{int(profile.cost_weight*100)}"
+        cumulative_results[profile_key] = {
+            'model_cost': [],
+            'oracle_cost': [],
+            'model_latency': [],
+            'oracle_latency': [],
+            'confusion_matrix': np.zeros((2, 2), dtype=int)
+        }
+
+# In the training loop, test each profile
 for window in windows:
     # Extração das janelas de treinamento e teste
     train_data = extract_data(df_access, *window['train'])
@@ -194,152 +226,90 @@ for window in windows:
     X_train_scaled = scaler.fit_transform(X_train_bal)
     X_test_scaled = scaler.transform(test_data.values)
 
-    # Treinamento do modelo para cada modelo especificado
+    # Treinamento do modelo para cada modelo e perfil
     for model_name in models_to_run:
-        if model_name == 'ONL':
-            # Modelo Online: prever 1 se houver acesso na janela de leitura, caso contrário prever 0
-            y_pred = (test_data.sum(axis=1) >= 1).astype(int).values
-        elif model_name == 'AHL':
-            # Always Hot: always predict 1 (HOT)
-            y_pred = np.ones_like(y_test)
-        elif model_name == 'AWL':
-            # Always Warm: always predict 0 (WARM)
-            y_pred = np.zeros_like(y_test)
-        else:
-            model = set_classifier(model_name, classifiers)
-            model.fit(X_train_scaled, y_train_bal)
-
-            # Previsão
-            y_pred = model.predict(X_test_scaled)
+        for profile in profiles:
+            profile_key = f"{model_name}_{int(profile.cost_weight*100)}"
             
-        access_counts = label_test_data.sum(axis=1)  # Sum over the weeks to get total accesses per object
-        # Calculate latency
-        model_latency = calculate_latency(y_pred, access_counts)
-        oracle_latency = calculate_latency(y_test, access_counts)  # Oracle latency with perfect predictions
+            if model_name == 'ONL':
+                y_pred = (test_data.sum(axis=1) >= 1).astype(int).values
+            elif model_name == 'AHL':
+                y_pred = np.ones_like(y_test)
+            elif model_name == 'AWL':
+                y_pred = np.zeros_like(y_test)
+            else:
+                model = set_classifier(model_name, classifiers)
+                model.fit(X_train_scaled, y_train_bal)
+                y_prob = model.predict_proba(X_test_scaled)
+                y_pred = (y_prob[:, 1] >= profile.decision_threshold).astype(int)
+            
+            access_counts = label_test_data.sum(axis=1)
+            volumes = test_data.index.map(lambda x: df_volume.loc[x, df_volume.columns[-1]])
+            
+            # Calculate metrics
+            cost = calculate_cost(y_pred, y_test)
+            latency = calculate_latency(y_pred, access_counts, volumes)
+            oracle_cost = calculate_cost(y_test, y_test)
+            oracle_latency = calculate_latency(y_test, access_counts, volumes)
 
-        # Accumulate latency results
-        cumulative_results[model_name]['model_latency'].append(model_latency)
-        cumulative_results[model_name]['oracle_latency'].append(oracle_latency)
+            # Store results
+            cumulative_results[profile_key]['model_cost'].append(cost)
+            cumulative_results[profile_key]['oracle_cost'].append(oracle_cost)
+            cumulative_results[profile_key]['model_latency'].append(latency)
+            cumulative_results[profile_key]['oracle_latency'].append(oracle_latency)
+            cumulative_results[profile_key]['confusion_matrix'] += confusion_matrix(y_test, y_pred)
 
-        # Avaliação do modelo
-        confusion = confusion_matrix(y_test, y_pred)
-        accuracy = accuracy_score(y_test, y_pred)
-        precision = precision_score(y_test, y_pred, average='weighted', zero_division=0)
-        recall = recall_score(y_test, y_pred, average='weighted', zero_division=0)
-        f1 = f1_score(y_test, y_pred, average='weighted', zero_division=0)
+            # Print results for this window
+            print(f"\nModelo: {model_name} - Profile: {int(profile.cost_weight*100)}//{int(profile.latency_weight*100)}")
+            print(f"Cost: {cost:.4f}, Latency: {latency:.4f}")
 
-        # Cálculo do custo do modelo e custo do oráculo
-        model_cost = calculate_cost(y_pred, y_test)
-        oracle_cost = calculate_cost(y_test, y_test)
-
-        # Armazena resultados acumulativos
-        cumulative_results[model_name]['model_cost'].append(model_cost)
-        cumulative_results[model_name]['oracle_cost'].append(oracle_cost)
-        cumulative_results[model_name]['confusion_matrix'] += confusion
-
-        # Impressão dos resultados
-        print(f"Modelo: {model_name}")
-        print(f"Janela {window}:")
-        print(f"Matriz de Confusão:\n{confusion}")
-        print(f"Acurácia: {accuracy:.2f}")
-        print(f"Precisão: {precision:.2f}")
-        print(f"Recall: {recall:.2f}")
-        print(f"F1 Score: {f1:.2f}")
-        print(f"Custo do Modelo: {model_cost:.2f}")
-        print(f"Custo do Oráculo: {oracle_cost:.2f}")
-        print("---------------------------------")
-
+# Prepare final results
 final_results = {}
-# Cálculo dos resultados finais acumulados
-for model_name in models_to_run:
-    # Get the accumulated confusion matrix
-    cm = cumulative_results[model_name]['confusion_matrix']
+for profile_key, results in cumulative_results.items():
+    model_name, cost_weight = profile_key.split('_')
+    cm = results['confusion_matrix']
     tn, fp, fn, tp = cm.ravel()
-
+    
     # Compute metrics
-    accuracy = (tp + tn) / (tp + tn + fp + fn)
+    accuracy = (tp + tn) / (tp + tn + fp + fn) if (tp + tn + fp + fn) > 0 else 0
     precision = tp / (tp + fp) if (tp + fp) > 0 else 0
     recall = tp / (tp + fn) if (tp + fn) > 0 else 0
     f1 = (2 * precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
     
-    # Calculate total latency
-    total_model_latency = np.sum(cumulative_results[model_name]['model_latency'])
-    total_oracle_latency = np.sum(cumulative_results[model_name]['oracle_latency'])
-
-    # Store the final results
-    final_results[model_name] = {
+    final_results[profile_key] = {
+        'model_name': model_name,
+        'cost_weight': cost_weight,
         'accuracy': accuracy,
         'precision': precision,
         'recall': recall,
         'f1': f1,
-        'model_cost': np.sum(cumulative_results[model_name]['model_cost']),
-        'oracle_cost': np.sum(cumulative_results[model_name]['oracle_cost']),
-        'model_latency': total_model_latency,
-        'oracle_latency': total_oracle_latency,
+        'model_cost': np.sum(results['model_cost']),
+        'oracle_cost': np.sum(results['oracle_cost']),
+        'model_latency': np.sum(results['model_latency']),
+        'oracle_latency': np.sum(results['oracle_latency']),
         'confusion_matrix': cm.tolist()
     }
 
-# Printing the final results
-print("\nResultados Finais Acumulativos:")
-for model_name, results in final_results.items():
-    print(f"Modelo: {model_name}")
-    print(f"Acurácia: {results['accuracy']:.4f}")
-    print(f"Precisão: {results['precision']:.4f}")
-    print(f"Recall: {results['recall']:.4f}")
-    print(f"F1 Score: {results['f1']:.4f}")
-    print(f"Custo Total do Modelo: {results['model_cost']:.2f}")
-    print(f"Custo Total do Oráculo: {results['oracle_cost']:.2f}")
-    print(f"Latência Total do Modelo: {results['model_latency']:.2f} ms")
-    print(f"Latência Total do Oráculo: {results['oracle_latency']:.2f} ms")
-    print(f"Matriz de Confusão Acumulada: {results['confusion_matrix']}")
-    print("---------------------------------")
-
-# Salvando os resultados finais em arquivos
-output_dir = os.path.join('results', f'results_{pop_name}_{window_size}_{step_size}')
-os.makedirs(output_dir, exist_ok=True)
-
-# Salvando em formato de texto
-output_txt_path = os.path.join(output_dir, 'resultados_finais.txt')
-with open(output_txt_path, 'w') as file:
-    file.write("Resultados Finais Acumulativos:\n")
-    for model_name, results in final_results.items():
-        file.write(f"Modelo: {model_name}\n")
-        file.write(f"Acurácia: {results['accuracy']:.4f}\n")
-        file.write(f"Precisão: {results['precision']:.4f}\n")
-        file.write(f"Recall: {results['recall']:.4f}\n")
-        file.write(f"F1 Score: {results['f1']:.4f}\n")
-        file.write(f"Custo Total do Modelo: {results['model_cost']:.2f}\n")
-        file.write(f"Custo Total do Oráculo: {results['oracle_cost']:.2f}\n")
-        file.write(f"Latência Total do Modelo: {results['model_latency']:.2f} ms\n")
-        file.write(f"Latência Total do Oráculo: {results['oracle_latency']:.2f} ms\n")
-        file.write(f"Matriz de Confusão Acumulada: {results['confusion_matrix']}\n")
-        file.write("---------------------------------\n")
-
-# Salvando em formato JSON
-output_json_path = os.path.join(output_dir, 'resultados_finais.json')
-with open(output_json_path, 'w') as file:
-    json.dump(final_results, file, indent=4)
-
-# Salvando em formato CSV
-# Prepare data for CSV
+# Save results to CSV with profile information
 results_for_csv = []
-for model_name, results in final_results.items():
+for profile_key, results in final_results.items():
+    model_name, cost_weight = profile_key.split('_')
     cm = results['confusion_matrix']
-    tn, fp, fn, tp = cm[0][0], cm[0][1], cm[1][0], cm[1][1]
     result_row = {
         'model_name': model_name,
+        'cost_weight': cost_weight,
         'accuracy': results['accuracy'],
         'precision': results['precision'],
         'recall': results['recall'],
         'f1_score': results['f1'],
         'model_cost': results['model_cost'],
         'oracle_cost': results['oracle_cost'],
-        'model_latency': results['model_latency'],
-        'oracle_latency': results['oracle_latency'],
-        'tn': tn,
-        'fp': fp,
-        'fn': fn,
-        'tp': tp
+        'model_latency': results['model_latency']/1000,
+        'oracle_latency': results['oracle_latency']/1000,
+        'tn': cm[0][0],
+        'fp': cm[0][1],
+        'fn': cm[1][0],
+        'tp': cm[1][1]
     }
     results_for_csv.append(result_row)
 
@@ -347,6 +317,9 @@ for model_name, results in final_results.items():
 results_df = pd.DataFrame(results_for_csv)
 
 # Save the DataFrame to CSV
+output_dir = os.path.join('results', f'results_{pop_name}_{window_size}_{step_size}')
+os.makedirs(output_dir, exist_ok=True)
+
 output_csv_path = os.path.join(output_dir, 'resultados_finais.csv')
 results_df.to_csv(output_csv_path, index=False)
 

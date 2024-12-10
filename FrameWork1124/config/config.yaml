@@ -8,9 +8,9 @@ models_to_run:
   - 'AWL'  # Always Warm
   - 'SVMR'
   - 'ONL'
-  - 'SVML'
-  - 'RF'
-  - 'DCT'
-  - 'KNN'
   - 'LR'
 pop_name: 'Pop2'
+
+# User Profile Configuration
+profile:
+  cost_weight: 20  # Value between 1-99, latency_weight will be (100 - cost_weight)
