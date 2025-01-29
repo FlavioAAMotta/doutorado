@@ -37,6 +37,9 @@ def run_multiple_weights():
     step_size = data_loader.params['step_size']
     pop_name = data_loader.params['pop_name']
     
+    # Criar string da estratégia de enjanelamento
+    window_strategy = f"{window_size}x{step_size}"
+    
     # Load data and create windows
     df_access = data_loader.load_access_data(pop_name)
     windows = get_time_windows(df_access, window_size, step_size)
@@ -92,6 +95,7 @@ def run_multiple_weights():
             y_true, y_pred = confusion_matrix_to_labels(conf_matrix)
             
             final_results[model_name] = {
+                'pop': model_name.split('_')[0],  # Extrair o nome do pop
                 'model': model_name,
                 'cost_weight': weight,
                 'total_model_cost': np.sum(cumulative_results[model_name]['model_cost']),
@@ -110,12 +114,18 @@ def run_multiple_weights():
     # Convert all results to DataFrame
     results_df = pd.DataFrame(all_results)
     
+    # Reordenar as colunas para melhor visualização
+    cols = ['pop', 'model', 'cost_weight', 'total_model_cost', 'total_model_latency', 
+            'total_oracle_cost', 'total_oracle_latency', 'accuracy', 'f1_score', 
+            'recall', 'precision', 'roc_auc', 'confusion_matrix']
+    results_df = results_df[cols]
+    
     # Convert DataFrame columns to numpy arrays before saving
     results_df['cost_weight'] = results_df['cost_weight'].to_numpy()
     
     # Save combined results
     os.makedirs(sensitivity_dir, exist_ok=True)
-    results_df.to_csv(os.path.join(sensitivity_dir, 'all_weights_results.csv'), index=False)
+    results_df.to_csv(os.path.join(sensitivity_dir, f'{pop_name}_{window_strategy}_all_weights_results.csv'), index=False)
 
 if __name__ == "__main__":
     run_multiple_weights() 

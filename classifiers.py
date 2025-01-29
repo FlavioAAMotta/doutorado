@@ -10,7 +10,7 @@ import pandas as pd
 from sklearn.model_selection import GridSearchCV
 
 
-def get_default_classifiers(probability=False, random_state=42, n_neighbors=None):
+def get_default_classifiers(probability=True, random_state=42, n_neighbors=None):
     if n_neighbors is None:
         n_neighbors = 4
 
@@ -24,8 +24,12 @@ def get_default_classifiers(probability=False, random_state=42, n_neighbors=None
         "LR": LogisticRegression(n_jobs=-1),
     }
 
-    voting_clf = VotingClassifier(list(default_clfs.items()), voting="soft", n_jobs=-1)
-    
+    voting_clf = VotingClassifier(
+        estimators=list(default_clfs.items()),
+        voting="soft",  # <--- "soft" voting uses predict_proba
+        n_jobs=-1
+    )
+
     param_grid = {
         "SVMR__C": [0.1, 1],
         "SVMR__gamma": [1, 0.1],
@@ -33,6 +37,7 @@ def get_default_classifiers(probability=False, random_state=42, n_neighbors=None
         "RF__n_estimators": [100, 200],
     }
 
+    # Wrap the voting classifier in a GridSearch
     grid = GridSearchCV(voting_clf, param_grid=param_grid, cv=3, n_jobs=-1)
 
     return {

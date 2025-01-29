@@ -152,9 +152,11 @@ def filter_by_volume(df, df_volume, start_week):
 def get_label(data):
     return (data.sum(axis=1) >= 1).astype(int)
 
-additional_fn_loss = 0.01
+# Penalidades
+additional_fn_loss = 0.01  # Custo adicional por impacto na latência
 fp_penalty = (HOT_STORAGE_COST - WARM_STORAGE_COST) + (HOT_OPERATION_COST - WARM_OPERATION_COST)
-fn_penalty = WARM_RETRIEVAL_COST + additional_fn_loss
+fn_penalty = WARM_RETRIEVAL_COST + (HOT_OPERATION_COST - WARM_OPERATION_COST) + additional_fn_loss
+
 # Função para calcular o custo do modelo
 def calculate_cost(predictions, actuals):
     total_cost = 0
@@ -162,12 +164,12 @@ def calculate_cost(predictions, actuals):
         if pred == HOT:
             total_cost += HOT_STORAGE_COST + HOT_OPERATION_COST
             if actual == WARM:
-                # False Positive
+                # Penalidade por classificar como HOT quando era WARM
                 total_cost += fp_penalty
         else:
             total_cost += WARM_STORAGE_COST + WARM_OPERATION_COST
             if actual == HOT:
-                # False Negative
+                # Penalidade por classificar como WARM quando era HOT
                 total_cost += fn_penalty
     return total_cost
 
@@ -226,8 +228,12 @@ def run_analysis(window, user_profile):
         else:
             model = set_classifier(model_name, classifiers)
             model.fit(X_train_scaled, y_train_bal)
-            y_prob = model.predict_proba(X_test_scaled)
-            y_pred = (y_prob[:, 1] >= user_profile.decision_threshold).astype(int)
+
+            if model_name == "HV":
+                y_pred = model.predict(X_test_scaled)
+            else:
+                y_prob = model.predict_proba(X_test_scaled)
+                y_pred = (y_prob[:, 1] >= user_profile.decision_threshold).astype(int)
         
         access_counts = label_test_data.sum(axis=1)
         volumes = test_data.index.map(lambda x: df_volume.loc[x, df_volume.columns[-1]])

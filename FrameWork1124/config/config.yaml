@@ -13,13 +13,16 @@ models_to_run:
   - 'RF'   # Random Forest
   - 'DCT'  # Decision Tree
   - 'KNN'  # K-Nearest Neighbors
-  - 'GBC'  # Gradient Boosting
-  - 'ABC'  # AdaBoost
-  - 'ETC'  # Extra Trees
-  - 'MLP'  # Neural Network
-  - 'XGB'  # XGBoost
-  - 'LGBM' # LightGBM
-pop_name: 'Pop1'
+  - 'SV-Grid'
+  - 'HV'
+  - 'SV'
+  # - 'GBC'  # Gradient Boosting
+  # - 'ABC'  # AdaBoost
+  # - 'ETC'  # Extra Trees
+  # - 'MLP'  # Neural Network
+  # - 'XGB'  # XGBoost
+  # - 'LGBM' # LightGBM
+pop_name: 'Pop2'
 
 # User Profile Configuration
 # profile:
