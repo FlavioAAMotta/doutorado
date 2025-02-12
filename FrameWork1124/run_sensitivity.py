@@ -48,7 +48,7 @@ def run_multiple_weights():
     weights = [1] + list(range(10, 91, 10)) + [99]
     
     # Create sensitivity results directory
-    sensitivity_dir = os.path.join('results', 'sensitivity_analysis')
+    sensitivity_dir = os.path.join('results-kmeans', 'sensitivity_analysis')
     os.makedirs(sensitivity_dir, exist_ok=True)
     
     # Store results for all weights

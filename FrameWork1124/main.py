@@ -8,6 +8,7 @@ from models.classifiers import get_default_classifiers, set_classifier
 import os
 import json
 from models.user_profiles import UserProfile
+from sklearn.cluster import KMeans
 
 # Definindo constantes da AWS
 WARM, HOT = 0, 1
@@ -173,13 +174,87 @@ def calculate_cost(predictions, actuals):
                 total_cost += fn_penalty
     return total_cost
 
-def run_analysis(window, user_profile):
+def get_object_features(df_volume, df_access, window_start, window_size):
+    """
+    Extrai características dos objetos para clustering, incluindo padrões de acesso
+    """
+    current_week = df_volume.columns[window_start]
+    window_end = window_start + window_size
+    
+    # Features de volume
+    volumes = df_volume[current_week]
+    
+    # Features de idade
+    object_ages = []
+    for obj in df_volume.index:
+        positive_volumes = df_volume.loc[obj][df_volume.loc[obj] > 0]
+        # Se não houver volumes positivos, assume idade 0
+        if len(positive_volumes) == 0:
+            age = 0
+        else:
+            first_week = positive_volumes.index[0]
+            age = df_volume.columns.get_loc(current_week) - df_volume.columns.get_loc(first_week)
+        object_ages.append(age)
+    
+    # Features de acesso
+    access_window = df_access.iloc[:, window_start:window_end]
+    
+    # Estatísticas de acesso
+    total_accesses = access_window.sum(axis=1)
+    mean_accesses = access_window.mean(axis=1)
+    max_accesses = access_window.max(axis=1)
+    access_frequency = (access_window > 0).sum(axis=1) / window_size  # Proporção de semanas com acesso
+    
+    # Tendência de acesso (correlação com tempo)
+    weeks = np.arange(window_size)
+    access_trends = []
+    for obj in access_window.index:
+        accesses = access_window.loc[obj].values
+        correlation = np.corrcoef(weeks, accesses)[0, 1] if np.std(accesses) > 0 else 0
+        access_trends.append(correlation)
+    
+    # Cria DataFrame com todas as features
+    features_df = pd.DataFrame({
+        'volume': volumes,
+        'age': object_ages,
+        'total_accesses': total_accesses,
+        'mean_accesses': mean_accesses,
+        'max_accesses': max_accesses,
+        'access_frequency': access_frequency,
+        'access_trend': access_trends
+    }, index=df_volume.index)
+    
+    return features_df
+
+def cluster_objects(features_df, n_clusters=3):
+    """
+    Agrupa objetos usando K-means
+    
+    Args:
+        features_df: DataFrame com features dos objetos
+        n_clusters: Número de clusters desejado
+    
+    Returns:
+        Array com labels dos clusters para cada objeto
+    """
+    # Normaliza features
+    scaler = StandardScaler()
+    features_scaled = scaler.fit_transform(features_df)
+    
+    # Aplica K-means
+    kmeans = KMeans(n_clusters=n_clusters, random_state=42, init='k-means++')
+    cluster_labels = kmeans.fit_predict(features_scaled)
+    
+    return cluster_labels
+
+def run_analysis(window, user_profile, output_dir):
     """
     Run analysis for a specific window and user profile
     
     Args:
         window: Dictionary containing window indices
         user_profile: UserProfile instance with cost/latency preferences
+        output_dir: Directory to save results
     
     Returns:
         Dictionary containing results for each model
@@ -215,25 +290,66 @@ def run_analysis(window, user_profile):
     X_train_scaled = scaler.fit_transform(X_train_bal)
     X_test_scaled = scaler.transform(test_data.values)
 
+    # Extrai features para clustering com window_size
+    features_df = get_object_features(df_volume, df_access, window['train'][0], window_size)
+    
+    # Aplica clustering
+    cluster_labels = cluster_objects(features_df)
+    
+    # Inicializa dicionário de thresholds
+    cluster_thresholds = {}
+    
+    # Ajusta threshold por cluster baseado nas características médias de cada cluster
+    cluster_stats = {}
+    for cluster in range(3):
+        cluster_mask = cluster_labels == cluster
+        cluster_features = features_df[cluster_mask]
+        
+        # Calcula médias das características para cada cluster
+        avg_access = cluster_features['mean_accesses'].mean()
+        avg_volume = cluster_features['volume'].mean()
+        avg_frequency = cluster_features['access_frequency'].mean()
+        
+        # Ajusta threshold baseado nas características do cluster
+        base_threshold = user_profile.decision_threshold
+        access_weight = 0.4
+        volume_weight = 0.3
+        frequency_weight = 0.3
+        
+        threshold_multiplier = (
+            access_weight * (avg_access / features_df['mean_accesses'].mean()) +
+            volume_weight * (avg_volume / features_df['volume'].mean()) +
+            frequency_weight * (avg_frequency / features_df['access_frequency'].mean())
+        )
+        
+        cluster_thresholds[cluster] = base_threshold * threshold_multiplier
+    
     # Resultados para cada modelo
     results = {}
     
     for model_name in models_to_run:
-        if model_name == 'ONL':
-            y_pred = (test_data.sum(axis=1) >= 1).astype(int).values
-        elif model_name == 'AHL':
-            y_pred = np.ones_like(y_test)
-        elif model_name == 'AWL':
-            y_pred = np.zeros_like(y_test)
+        if model_name in ['ONL', 'AHL', 'AWL']:
+            if model_name == 'ONL':
+                y_pred = (test_data.sum(axis=1) >= 1).astype(int).values
+            elif model_name == 'AHL':
+                y_pred = np.ones_like(y_test)
+            elif model_name == 'AWL':
+                y_pred = np.zeros_like(y_test)
         else:
             model = set_classifier(model_name, classifiers)
             model.fit(X_train_scaled, y_train_bal)
-
+            
             if model_name == "HV":
                 y_pred = model.predict(X_test_scaled)
             else:
                 y_prob = model.predict_proba(X_test_scaled)
-                y_pred = (y_prob[:, 1] >= user_profile.decision_threshold).astype(int)
+                
+                # Aplica threshold específico por cluster
+                y_pred = np.zeros_like(y_test)
+                for cluster in range(3):
+                    cluster_mask = cluster_labels == cluster
+                    cluster_threshold = cluster_thresholds[cluster]
+                    y_pred[cluster_mask] = (y_prob[cluster_mask, 1] >= cluster_threshold).astype(int)
         
         access_counts = label_test_data.sum(axis=1)
         volumes = test_data.index.map(lambda x: df_volume.loc[x, df_volume.columns[-1]])
@@ -247,12 +363,25 @@ def run_analysis(window, user_profile):
             'confusion_matrix': confusion_matrix(y_test, y_pred)
         }
     
+    # Salvar informações dos clusters
+    cluster_info = pd.DataFrame({
+        'cluster': range(3),
+        'threshold': [cluster_thresholds[i] for i in range(3)]
+    })
+    cluster_info_path = os.path.join(output_dir, 'cluster_thresholds.csv')
+    cluster_info.to_csv(cluster_info_path, index=False)
+    print(f"Informações dos clusters salvas em: {cluster_info_path}")
+    
     return results
+
+# Define output_dir antes do loop
+output_dir = os.path.join('results', f'kmeans_results_{pop_name}_{window_size}_{step_size}')
+os.makedirs(output_dir, exist_ok=True)
 
 # Prepare final results
 final_results = {}
 for window in windows:
-    results = run_analysis(window, user_profile)
+    results = run_analysis(window, user_profile, output_dir)
     for model_name, result in results.items():
         profile_key = f"{model_name}_{int(user_profile.cost_weight*100)}"
         
@@ -306,9 +435,6 @@ for profile_key, results in final_results.items():
 results_df = pd.DataFrame(results_for_csv)
 
 # Save the DataFrame to CSV
-output_dir = os.path.join('results', f'results_{pop_name}_{window_size}_{step_size}')
-os.makedirs(output_dir, exist_ok=True)
-
 output_csv_path = os.path.join(output_dir, 'resultados_finais.csv')
 results_df.to_csv(output_csv_path, index=False)
 
