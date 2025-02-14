@@ -64,19 +64,32 @@ def analyze_sensitivity_results(sensitivity_dir, pop_name, window_size, step_siz
     base_output_dir = os.path.join(output_dir, f'{pop_name}/{window_size}x{step_size}')
     os.makedirs(base_output_dir, exist_ok=True)
     
-    # Read combined results
+    # Ler os resultados
     df = pd.read_csv(os.path.join(sensitivity_dir, f'{pop_name}_{window_size}x{step_size}_all_weights_results.csv'))
     
-    # Sort by cost_weight for proper plotting
-    df = df.sort_values('cost_weight')
+    # Calcular RCS (Relative Cost Savings)
+    # Primeiro, encontrar o custo do baseline (ONL) para cada peso
+    baseline_costs = df[df['model'].str.contains('ONL')].groupby('cost_weight')['total_model_cost'].first()
     
-    # Create plots for each metric
+    # Calcular RCS para cada modelo
+    df['rcs'] = df.apply(
+        lambda row: ((baseline_costs[row['cost_weight']] - row['total_model_cost']) / 
+                    baseline_costs[row['cost_weight']] * 100),
+        axis=1
+    )
+    
+    # Atualizar o dicionário de métricas para incluir recall e rcs
     metrics = {
         'total_model_cost': 'Total Cost',
         'total_model_latency': 'Total Latency (s)',
         'accuracy': 'Accuracy',
-        'f1_score': 'F1 Score'
+        'f1_score': 'F1 Score',
+        'recall': 'Recall',
+        'rcs': 'Relative Cost Savings (%)'
     }
+    
+    # Sort by cost_weight for proper plotting
+    df = df.sort_values('cost_weight')
     
     # Extrair nomes únicos dos algoritmos dos dados
     algorithms = sorted(list(set([model.split('_')[0] for model in df['model'].unique()])))
@@ -247,7 +260,7 @@ def analyze_sensitivity_results(sensitivity_dir, pop_name, window_size, step_siz
     pareto_df['pop'] = pareto_df['model'].apply(lambda x: x.split('_')[0])
     
     # Reordenar as colunas para melhor visualização
-    cols = ['pop', 'model', 'cost_weight', 'total_model_cost', 'total_model_latency', 'accuracy', 'f1_score']
+    cols = ['pop', 'model', 'cost_weight', 'total_model_cost', 'total_model_latency', 'accuracy', 'f1_score', 'recall', 'rcs']
     pareto_df = pareto_df[cols]
     
     # Plotar pontos não dominados, coloridos por modelo
@@ -287,6 +300,34 @@ def analyze_sensitivity_results(sensitivity_dir, pop_name, window_size, step_siz
     
     # Salvar dados dos pontos não dominados
     pareto_df.to_csv(os.path.join(base_output_dir, 'pareto_frontier_points.csv'), index=False)
+    
+    # Criar um resumo específico do RCS
+    rcs_summary = df.groupby('model')['rcs'].agg(['mean', 'min', 'max']).round(2)
+    rcs_summary.to_csv(os.path.join(base_output_dir, 'rcs_summary.csv'))
+    
+    # Criar um plot específico para RCS
+    plt.figure(figsize=(12, 6))
+    for model in df['model'].unique():
+        model_base = model.split('_')[0]
+        model_data = df[df['model'] == model]
+        plt.plot(model_data['cost_weight'].to_numpy(), 
+                model_data['rcs'].to_numpy(),
+                marker=markers[model_base],
+                color=colors[model_base],
+                label=model,
+                markersize=8,
+                alpha=0.7)
+    
+    plt.xlabel('Cost Weight', fontsize=12)
+    plt.ylabel('Relative Cost Savings (%)', fontsize=12)
+    plt.title('RCS vs Cost Weight', fontsize=14)
+    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.grid(True, linestyle='--', alpha=0.3)
+    plt.tight_layout()
+    plt.savefig(os.path.join(base_output_dir, 'rcs_trend.png'), 
+                dpi=300, 
+                bbox_inches='tight')
+    plt.close()
     
     return summary
 
